@@ -17,12 +17,14 @@ function MainList() {
 
     const loadMorePosts = async () => {
         try {
-            const newPosts = await fetchPostsLoadable;
-            if (newPosts.length > 0) {
-                setPosts((prevPosts) => [...prevPosts, ...newPosts])
-                setPage((prevPage) => prevPage + 1);
-            } else {
-                setHasMore(false);
+            if (fetchPostsLoadable.state === 'hasValue') {
+                const newPosts = fetchPostsLoadable.contents;
+                if (newPosts.length > 0) {
+                    setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+                    setPage((prevPage) => prevPage + 1);
+                } else {
+                    setHasMore(false);
+                }
             }
         } catch (error) {
             console.error('글 로드에 실패했습니다.', error);
@@ -31,8 +33,11 @@ function MainList() {
     }
 
     useEffect(() => {
-        loadMorePosts();
-    }, []);
+        console.log(fetchPostsLoadable.state);
+        if (fetchPostsLoadable.state === 'hasValue') {
+            loadMorePosts();
+        }
+    }, [fetchPostsLoadable.state]);
 
 
     return (
@@ -47,7 +52,7 @@ function MainList() {
             >
                 {posts.map((post) => (
                     <Post 
-                        key={post.id}
+                        key={post.postId}
                         title={post.title}
                         date={post.date}
                         content={post.content}

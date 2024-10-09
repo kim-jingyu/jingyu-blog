@@ -22,7 +22,7 @@ export const fetchPostSelector = selector({
         const page = get(pageState);
         try {
             const posts = await fetchPosts(page);
-            return posts;
+            return posts.content;
         } catch (error) {
             console.error("글 가져오기에 실패했습니다.", error);
             return [];
