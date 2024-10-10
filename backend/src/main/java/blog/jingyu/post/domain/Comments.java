@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @Getter
 @Builder
-public class Comment extends BaseEntity {
+public class Comments extends BaseEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "comment_seq_gen")
     @SequenceGenerator(name = "comment_seq_gen", sequenceName = "comment_seq", allocationSize = 1)

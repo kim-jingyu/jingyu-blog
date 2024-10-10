@@ -30,7 +30,9 @@ public class LoginService {
         Member member = memberRepository.findBySocialLoginId(oauthUserInfo.getSocialLoginId())
                 .orElseGet(() -> createMember(oauthUserInfo));
         MemberTokens memberTokens = jwtProvider.generateLoginToken(member.getMemberId().toString());
-        refreshTokenRepository.save(new RefreshToken(memberTokens.refreshToken(), member.getMemberId()));
+        System.out.println("memberTokens = " + memberTokens);
+        RefreshToken refreshToken = refreshTokenRepository.save(new RefreshToken(memberTokens.refreshToken(), member.getMemberId()));
+        System.out.println("refreshToken = " + refreshToken);
         return memberTokens;
     }
 
@@ -54,7 +56,7 @@ public class LoginService {
         int tryCount = 0;
         while (tryCount < TRT_COUNT) {
             String nickname = oauthUserInfo.getName() + generateRandomCode();
-            if (!memberRepository.existsByNickname(nickname)) {
+            if (!memberRepository.existsByName(nickname)) {
                 return memberRepository.save(Member.createMember(oauthUserInfo.getSocialLoginId(), nickname, oauthUserInfo.getProfileImg()));
             }
             tryCount += 1;

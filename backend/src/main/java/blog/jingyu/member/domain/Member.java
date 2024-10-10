@@ -23,10 +23,10 @@ public class Member extends BaseEntity {
     private String name;
     private String profileImg;
 
-    public static Member createMember(String socialLoginId, String nickname, String profileImg) {
+    public static Member createMember(String socialLoginId, String name, String profileImg) {
         return Member.builder()
                 .socialLoginId(socialLoginId)
-                .name(nickname)
+                .name(name)
                 .profileImg(profileImg)
                 .build();
     }

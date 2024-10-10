@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 @Component
 @Slf4j
 public class GoogleOauthProvider implements OauthProvider{
-    private static final String PREV = "${oauth2.provider.google.";
+    private static final String PREV = "${oauth2.google.";
     private static final String PROVIDER_NAME = "google";
 
     protected final String clientId;

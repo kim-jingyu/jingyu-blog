@@ -24,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 @Component
 @Slf4j
 public class KakaoOauthProvider implements OauthProvider{
-    private static final String PREV = "${oauth2.provider.kakao.";
+    private static final String PREV = "${oauth2.kakao.";
     private static final String PROVIDER_NAME = "kakao";
     private static final String SECURE_RESOURCE = "secure_resource";
 
