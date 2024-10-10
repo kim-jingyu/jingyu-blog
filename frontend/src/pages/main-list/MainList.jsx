@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/commons/header/Header"
 import InfiniteScroll from 'react-infinite-scroll-component'
-import Post from "../../components/Post/Post";
+import Post from "../../components/post/Post";
 import { useRecoilState, useRecoilValueLoadable } from "recoil";
 import { fetchPostSelector, hasMoreState, pageState, postState } from "../../recoils/PostAtoms";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +54,15 @@ function MainList() {
                     <Post 
                         key={post.postId}
                         title={post.title}
-                        date={post.date}
+                        date={new Date(post.date).toLocaleString('ko-KR', {
+                            timeZone: 'Asia/Seoul',
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        })}
                         content={post.content}
                     />
                 ))}
