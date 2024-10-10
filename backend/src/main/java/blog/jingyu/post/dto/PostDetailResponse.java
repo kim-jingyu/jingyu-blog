@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record PostResponse(Long postId, String title, String content, LocalDateTime date, List<HashtagResponse> hashtags) {
-    public PostResponse(Post post) {
+public record PostDetailResponse(Long postId, String title, String content, LocalDateTime date, List<HashtagResponse> hashtags) {
+    public PostDetailResponse(Post post) {
         this(post.getPostId(),
                 post.getTitle(),
                 post.getContents(),

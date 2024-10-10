@@ -1,5 +1,6 @@
 package blog.jingyu.post.controller;
 
+import blog.jingyu.post.dto.PostDetailResponse;
 import blog.jingyu.post.dto.PostRequest;
 import blog.jingyu.post.dto.PostResponse;
 import blog.jingyu.post.service.PostService;
@@ -19,6 +20,11 @@ public class PostController {
     public ResponseEntity<Page<PostResponse>> getPosts(@RequestParam(value = "page", defaultValue = "0", required = false) int page) {
         return ResponseEntity.ok()
                 .body(postService.getPosts(page));
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping
