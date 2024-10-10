@@ -1,6 +1,7 @@
 package blog.jingyu.post.domain;
 
 import blog.jingyu.global.entity.BaseEntity;
+import blog.jingyu.member.domain.Member;
 import blog.jingyu.post.dto.PostRequest;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static jakarta.persistence.FetchType.*;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -32,6 +34,9 @@ public class Post extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hashtag> hashtags = new ArrayList<>();
+
+    @OneToOne(fetch = LAZY)
+    private Member member;
 
     public static Post createPost(PostRequest postRequest) {
         Post post = Post.builder()
