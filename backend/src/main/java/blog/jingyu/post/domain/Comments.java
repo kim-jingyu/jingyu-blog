@@ -1,15 +1,11 @@
 package blog.jingyu.post.domain;
 
 import blog.jingyu.global.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import blog.jingyu.member.domain.Member;
+import jakarta.persistence.*;
+import lombok.*;
 
+import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -24,5 +20,12 @@ public class Comments extends BaseEntity {
     @SequenceGenerator(name = "comment_seq_gen", sequenceName = "comment_seq", allocationSize = 1)
     private Long commentId;
 
+    private String content;
 
+    @OneToOne(fetch = LAZY)
+    private Member member;
+
+    @Setter
+    @ManyToOne(fetch = LAZY)
+    private Post post;
 }

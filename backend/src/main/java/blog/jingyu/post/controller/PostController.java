@@ -1,6 +1,10 @@
 package blog.jingyu.post.controller;
 
+import blog.jingyu.admin.domain.AdminCheck;
+import blog.jingyu.admin.domain.AdminOnly;
+import blog.jingyu.login.domain.auth.Accessor;
 import blog.jingyu.post.dto.PostDetailResponse;
+import blog.jingyu.post.dto.PostEditRequest;
 import blog.jingyu.post.dto.PostRequest;
 import blog.jingyu.post.dto.PostResponse;
 import blog.jingyu.post.service.PostService;
@@ -24,18 +28,20 @@ public class PostController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable("id") Long id) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                .body(postService.getPostDetail(id));
     }
 
+    @AdminOnly
     @PostMapping
-    public ResponseEntity<Long> makePost(@RequestBody PostRequest postRequest) {
+    public ResponseEntity<Long> makePost(@AdminCheck Accessor accessor, @RequestBody PostRequest postRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postService.makePost(postRequest));
+                .body(postService.makePost(accessor.getMemberId(), postRequest));
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<PostResponse> editPost(@PathVariable("id") Long id, @RequestBody PostRequest postRequest) {
+    public ResponseEntity<PostResponse> editPost(@PathVariable("id") Long id, @RequestBody PostEditRequest postEditRequest) {
         return ResponseEntity.ok()
-                .body(postService.editPost(id, postRequest));
+                .body(postService.editPost(id, postEditRequest));
     }
 }

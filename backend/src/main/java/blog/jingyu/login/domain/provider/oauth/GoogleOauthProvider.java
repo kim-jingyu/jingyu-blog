@@ -3,7 +3,7 @@ package blog.jingyu.login.domain.provider.oauth;
 import blog.jingyu.login.domain.token.AccessToken;
 import blog.jingyu.login.domain.userinfo.GoogleUserInfo;
 import blog.jingyu.login.domain.userinfo.OauthUserInfo;
-import blog.jingyu.login.exception.LoginException;
+import blog.jingyu.login.exception.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -67,7 +67,7 @@ public class GoogleOauthProvider implements OauthProvider{
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody();
         }
-        throw new LoginException();
+        throw new AuthException();
     }
 
     private String requestAccessToken(String code) {
@@ -93,7 +93,7 @@ public class GoogleOauthProvider implements OauthProvider{
         log.info("accessTokenResponse={}", accessTokenResponse);
 
         return Optional.ofNullable(accessTokenResponse.getBody())
-                .orElseThrow(LoginException::new)
+                .orElseThrow(AuthException::new)
                 .accessToken();
     }
 }

@@ -1,6 +1,7 @@
 package blog.jingyu.post.domain;
 
 import blog.jingyu.global.entity.BaseEntity;
+import blog.jingyu.post.dto.HashtagRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,14 @@ public class Hashtag extends BaseEntity {
     @Setter
     @ManyToOne(fetch = LAZY)
     private Post post;
+
+    private Hashtag(HashtagRequest request) {
+        this(null, request.content(), null);
+    }
+
+    public static Hashtag createHashtag(HashtagRequest request) {
+        return new Hashtag(request);
+    }
 
     public void editContent(String content) {
         this.content = content;
