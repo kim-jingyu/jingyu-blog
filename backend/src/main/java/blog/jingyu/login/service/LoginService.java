@@ -6,7 +6,7 @@ import blog.jingyu.login.domain.provider.oauth.OauthProviders;
 import blog.jingyu.login.domain.token.MemberTokens;
 import blog.jingyu.login.domain.token.RefreshToken;
 import blog.jingyu.login.domain.userinfo.OauthUserInfo;
-import blog.jingyu.login.exception.LoginException;
+import blog.jingyu.login.exception.AuthException;
 import blog.jingyu.login.repository.RefreshTokenRepository;
 import blog.jingyu.member.domain.Member;
 import blog.jingyu.member.repository.MemberRepository;
@@ -39,13 +39,13 @@ public class LoginService {
     public String renewalAccessToken(String refreshTokenRequest, String authorizationHeader) {
         String accessToken = bearerExtractor.extractAccessToken(authorizationHeader);
         if (jwtProvider.checkValidRefreshAndInvalidAccess(refreshTokenRequest, accessToken)) {
-            RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenRequest).orElseThrow(LoginException::new);
+            RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenRequest).orElseThrow(AuthException::new);
             return jwtProvider.regenerateAccessToke(refreshToken.memberId().toString());
         }
         if (jwtProvider.checkValidRefreshAndAccess(refreshTokenRequest, accessToken)) {
             return accessToken;
         }
-        throw new LoginException();
+        throw new AuthException();
     }
 
     public void removeRefreshToken(String refreshToken) {
@@ -61,7 +61,7 @@ public class LoginService {
             }
             tryCount += 1;
         }
-        throw new LoginException();
+        throw new AuthException();
     }
 
     private String generateRandomCode() {

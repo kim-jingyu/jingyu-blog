@@ -1,6 +1,6 @@
 package blog.jingyu.login.domain.provider.oauth;
 
-import blog.jingyu.login.exception.LoginException;
+import blog.jingyu.login.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +15,6 @@ public class OauthProviders {
         return providers.stream()
                 .filter(provider -> provider.is(providerName))
                 .findFirst()
-                .orElseThrow(LoginException::new);
+                .orElseThrow(AuthException::new);
     }
 }

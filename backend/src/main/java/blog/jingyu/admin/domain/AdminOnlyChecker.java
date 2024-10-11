@@ -1,4 +1,4 @@
-package blog.jingyu.member.domain;
+package blog.jingyu.admin.domain;
 
 import blog.jingyu.login.domain.auth.Accessor;
 import blog.jingyu.login.exception.AuthException;
@@ -11,13 +11,13 @@ import java.util.Arrays;
 
 @Aspect
 @Component
-public class MemberOnlyChecker {
-    @Before("@annotation(blog.jingyu.member.domain.MemberOnly)")
+public class AdminOnlyChecker {
+    @Before("@annotation(blog.jingyu.admin.domain.AdminOnly)")
     public void check(JoinPoint joinPoint) {
         Arrays.stream(joinPoint.getArgs())
                 .filter(Accessor.class::isInstance)
                 .map(Accessor.class::cast)
-                .filter(Accessor::isMember)
+                .filter(Accessor::isAdmin)
                 .findFirst()
                 .orElseThrow(AuthException::new);
     }

@@ -1,17 +1,23 @@
 package blog.jingyu.post.domain;
 
+import blog.jingyu.admin.domain.Admin;
 import blog.jingyu.global.entity.BaseEntity;
-import blog.jingyu.member.domain.Member;
+import blog.jingyu.post.dto.HashtagEditRequest;
+import blog.jingyu.post.dto.HashtagRequest;
+import blog.jingyu.post.dto.PostEditRequest;
 import blog.jingyu.post.dto.PostRequest;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -35,38 +41,45 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hashtag> hashtags = new ArrayList<>();
 
-    @OneToOne(fetch = LAZY)
-    private Member member;
+    @ManyToOne(fetch = LAZY)
+    private Admin admin;
 
-    public static Post createPost(PostRequest postRequest) {
+    @Builder.Default
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comments> comments = new ArrayList<>();
+
+    public static Post createPost(Admin admin, PostRequest postRequest) {
         Post post = Post.builder()
                 .title(postRequest.title())
                 .contents(postRequest.contents())
-                .hashtags(postRequest.hashtags())
+                .hashtags(postRequest.hashtags().stream()
+                        .map(Hashtag::createHashtag)
+                        .toList())
+                .admin(admin)
                 .build();
         post.getHashtags().forEach(hashtag -> hashtag.setPost(post));
         return post;
     }
 
-    public Post editPost(PostRequest postRequest) {
-        if (postRequest.title() != null) {
-            this.title = postRequest.title();
+    public Post editPost(PostEditRequest postEditRequest) {
+        if (postEditRequest.title() != null) {
+            this.title = postEditRequest.title();
         }
-        if (postRequest.contents() != null) {
-            this.contents = postRequest.contents();
+        if (postEditRequest.contents() != null) {
+            this.contents = postEditRequest.contents();
         }
-        if (postRequest.hashtags() != null) {
+        if (postEditRequest.hashtags() != null) {
             Map<Long, Hashtag> hashtagMap = hashtags.stream()
                     .collect(Collectors.toMap(Hashtag::getHashtagId, hashtag -> hashtag));
-            for (Hashtag requestHashtag : postRequest.hashtags()) {
-                Hashtag postHashtag = hashtagMap.get(requestHashtag.getHashtagId());
-
-                if (postHashtag != null) {
-                    postHashtag.editContent(requestHashtag.getContent());
-                } else {
-                    requestHashtag.setPost(this);
-                    this.hashtags.add(requestHashtag);
+            for (HashtagEditRequest requestEditHashtag : postEditRequest.hashtags()) {
+                Hashtag postHashtag = hashtagMap.get(requestEditHashtag.hashtagId());
+                if (postHashtag == null) {
+                    postHashtag = Hashtag.createHashtag(new HashtagRequest(requestEditHashtag.content()));
+                    postHashtag.setPost(this);
+                    this.hashtags.add(postHashtag);
+                    continue;
                 }
+                postHashtag.editContent(requestEditHashtag.content());
             }
         }
         return this;
