@@ -33,12 +33,14 @@ function MainList() {
     }
 
     useEffect(() => {
-        console.log(fetchPostsLoadable.state);
         if (fetchPostsLoadable.state === 'hasValue') {
             loadMorePosts();
         }
     }, [fetchPostsLoadable.state]);
 
+    const clickDetailPost = (postId) => {
+        navigate(`/post/${postId}`);
+    };
 
     return (
         <>
@@ -64,6 +66,7 @@ function MainList() {
                             second: '2-digit'
                         })}
                         content={post.content}
+                        onClick={() => clickDetailPost(post.postId)}
                     />
                 ))}
             </InfiniteScroll>

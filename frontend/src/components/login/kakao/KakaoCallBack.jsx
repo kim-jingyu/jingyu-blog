@@ -1,3 +1,4 @@
+import { jwtDecode } from 'jwt-decode';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -24,17 +25,11 @@ const KakaoLoginCallback = () => {
         .then((data) => {
           const accessToken = data.accessToken; 
           console.log('Access Token:', accessToken);
-          // 로컬 스토리지에 토큰 저장
           localStorage.setItem('accessToken', accessToken);
-          // memberId 로컬 스토리지에 저장
-          const tokenParts = accessToken.split('.');
-          const encodedPayload = tokenParts[1];
-          const decodedPayload = atob(encodedPayload.replace(/-/g, '+').replace(/_/g, '/'));
-          const payloadObj = JSON.parse(decodedPayload);
-          const memberId = payloadObj.sub; 
-          console.log('Member ID', memberId);
+          const payloadObj = jwtDecode(accessToken);
+          const memberId = payloadObj.sub;
           localStorage.setItem('memberId', memberId);
-          navigate('/'); // 메인 페이지로 리디렉션
+          navigate('/');
         })
         .catch((error) => {
           console.error('Error:', error);

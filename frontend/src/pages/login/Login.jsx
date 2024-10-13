@@ -16,15 +16,27 @@ import {
 import { useState } from 'react';
 import GoogleButton from '/src/components/login/google/GoogleButton';
 import KakaoButton from '/src/components/login/kakao/KakaoButton';
+import { adminLogin } from '../../apis/loginApi';
 
 function Login() {
   const navigate = useNavigate();
-  const login = (event) => {
+  const [open, setOpen] = useState(false);
+  const [loginId, setLoginId] = useState('');
+  const [password, setPassword] = useState('');
+
+  const login = async (event) => {
     event.preventDefault();
-    setOpen(true);
+    try {
+      const response = await adminLogin({ loginId, password });
+      console.log(response);
+      navigate('/');
+    } catch (error) {
+      console.error('로그인 실패:',error);
+      setOpen(true);
+    }
     return;
   };
-  const [open, setOpen] = useState(false);
+
   // 모달 취소 클릭
   const handleOk = (event) => {
     event.preventDefault();
@@ -41,8 +53,8 @@ function Login() {
         <LoginContainer>
           <Title>로그인</Title>
           <LoginForm>
-            <InputField placeholder="아이디" />
-            <InputField type="password" placeholder="비밀번호" />
+            <InputField placeholder="아이디" value={loginId} onChange={(e) => setLoginId(e.target.value)} />
+            <InputField type="password" placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} />
             <LoginButton onClick={login}>로그인</LoginButton>
           </LoginForm>
           <Options>
@@ -57,10 +69,6 @@ function Login() {
           <SocialLogin>
             <GoogleButton>구글 로그인</GoogleButton>
             <KakaoButton>카카오 로그인</KakaoButton>
-            <br /> <br />
-            <LoginButton style={{ width: '100%' }} onClick={() => navigate('/signup')}>
-              회원가입 하러 가기
-            </LoginButton>
           </SocialLogin>
         </LoginContainer>
       </LoginWrapper>
