@@ -20,6 +20,16 @@ const router = createBrowserRouter([
                 errorElement: <PAGE.NotFound />
             },
             {
+                path: PATH.PostWrite,
+                element: <PAGE.Post />,
+                errorElement: <PAGE.NotFound />
+            },
+            {
+                path: PATH.PostDetail,
+                element: <PAGE.PostDetail />,
+                errorElement: <PAGE.NotFound />
+            },
+            {
                 path: PATH.GoogleCallBack,
                 element: <PAGE.GoogleLoginCallback />,
                 errorElement: <PAGE.NotFound />
