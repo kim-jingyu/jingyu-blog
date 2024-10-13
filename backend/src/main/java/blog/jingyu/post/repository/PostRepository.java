@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query("SELECT p FROM Post p JOIN FETCH p.hashtags")
+    @Query("SELECT p FROM Post p LEFT JOIN FETCH p.hashtags")
     Page<PostResponse> findAllPost(Pageable pageable);
 
     default Post getById(Long postId) {

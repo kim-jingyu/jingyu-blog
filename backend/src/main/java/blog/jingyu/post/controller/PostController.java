@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/posts")
+@RequestMapping(value = "/post")
 public class PostController {
     private final PostService postService;
 

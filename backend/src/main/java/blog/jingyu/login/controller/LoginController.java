@@ -45,9 +45,20 @@ public class LoginController {
     }
 
     @MemberOnly
-    @DeleteMapping(value = "/logout")
+    @PostMapping(value = "/logout")
     public ResponseEntity<Void> logout(@MemberCheck Accessor accessor, @CookieValue("refreshToken") String refreshToken) {
         loginService.removeRefreshToken(refreshToken);
-        return ResponseEntity.noContent().build();
+
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+                .path("/")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .maxAge(0)
+                .build();
+
+        return ResponseEntity.noContent()
+                .header(SET_COOKIE, cookie.toString())
+                .build();
     }
 }

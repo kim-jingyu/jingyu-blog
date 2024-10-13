@@ -1,5 +1,6 @@
 package blog.jingyu.global.config;
 
+import blog.jingyu.login.domain.auth.AdminArgumentResolver;
 import blog.jingyu.login.domain.auth.LoginArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
     private final LoginArgumentResolver loginArgumentResolver;
+    private final AdminArgumentResolver adminArgumentResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(loginArgumentResolver);
+        resolvers.add(adminArgumentResolver);
     }
 
     @Override
@@ -25,7 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:5173")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
-                .exposedHeaders("accessToken", "refreshToken")
+                .exposedHeaders("Authorization", "accessToken", "refreshToken")
                 .allowCredentials(true);
     }
 }

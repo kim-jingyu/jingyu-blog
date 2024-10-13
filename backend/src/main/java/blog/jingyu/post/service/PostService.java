@@ -36,6 +36,7 @@ public class PostService {
     @Transactional
     public Long makePost(Long adminId, PostRequest postRequest) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(MemberNotFoundException::new);
+        System.out.println("postRequest.contents() = " + postRequest.contents());
         return postRepository.save(Post.createPost(admin, postRequest)).getPostId();
     }
 
