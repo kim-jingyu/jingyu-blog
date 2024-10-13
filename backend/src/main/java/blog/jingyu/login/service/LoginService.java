@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static blog.jingyu.login.domain.auth.Authority.MEMBER;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,10 +31,8 @@ public class LoginService {
         OauthUserInfo oauthUserInfo = oauthProviders.mapping(providerName).getUserInfo(code);
         Member member = memberRepository.findBySocialLoginId(oauthUserInfo.getSocialLoginId())
                 .orElseGet(() -> createMember(oauthUserInfo));
-        MemberTokens memberTokens = jwtProvider.generateLoginToken(member.getMemberId().toString());
-        System.out.println("memberTokens = " + memberTokens);
-        RefreshToken refreshToken = refreshTokenRepository.save(new RefreshToken(memberTokens.refreshToken(), member.getMemberId()));
-        System.out.println("refreshToken = " + refreshToken);
+        MemberTokens memberTokens = jwtProvider.generateLoginToken(member.getMemberId().toString(), MEMBER);
+        refreshTokenRepository.save(new RefreshToken(memberTokens.refreshToken(), member.getMemberId()));
         return memberTokens;
     }
 
@@ -40,7 +40,7 @@ public class LoginService {
         String accessToken = bearerExtractor.extractAccessToken(authorizationHeader);
         if (jwtProvider.checkValidRefreshAndInvalidAccess(refreshTokenRequest, accessToken)) {
             RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenRequest).orElseThrow(AuthException::new);
-            return jwtProvider.regenerateAccessToke(refreshToken.memberId().toString());
+            return jwtProvider.regenerateAccessToken(refreshToken.memberId().toString(), MEMBER);
         }
         if (jwtProvider.checkValidRefreshAndAccess(refreshTokenRequest, accessToken)) {
             return accessToken;

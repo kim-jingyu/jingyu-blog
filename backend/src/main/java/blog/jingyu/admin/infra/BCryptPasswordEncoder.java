@@ -11,7 +11,7 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
     }
 
     @Override
-    public Boolean match(String password, String newPassword) {
-        return BCrypt.checkpw(password, newPassword);
+    public Boolean match(String rawPassword, String encodedPassword) {
+        return BCrypt.checkpw(rawPassword, encodedPassword);
     }
 }

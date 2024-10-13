@@ -14,6 +14,8 @@ import java.util.Arrays;
 public class MemberOnlyChecker {
     @Before("@annotation(blog.jingyu.member.domain.MemberOnly)")
     public void check(JoinPoint joinPoint) {
+        System.out.println("joinPoint = " + Arrays.toString(joinPoint.getArgs()));
+
         Arrays.stream(joinPoint.getArgs())
                 .filter(Accessor.class::isInstance)
                 .map(Accessor.class::cast)

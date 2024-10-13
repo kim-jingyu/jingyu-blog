@@ -56,9 +56,20 @@ public class AdminController {
     }
 
     @AdminOnly
-    @DeleteMapping("/logout")
-    public ResponseEntity<Void> logout(@CookieValue("refreshToken") String refreshToken) {
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@AdminCheck Accessor accessor, @CookieValue("refreshToken") String refreshToken) {
         adminService.removeRefreshToken(refreshToken);
-        return ResponseEntity.noContent().build();
+
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+                .path("/")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .maxAge(0)
+                .build();
+
+        return ResponseEntity.noContent()
+                .header(SET_COOKIE, cookie.toString())
+                .build();
     }
 }

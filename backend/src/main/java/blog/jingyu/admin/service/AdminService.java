@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static blog.jingyu.login.domain.auth.Authority.ADMIN;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class AdminService {
 
     public Long updatePassword(Long adminId, AdminPwUpdateRequest request) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(MemberNotFoundException::new);
-        if (!passwordEncoder.match(admin.getPassword(), request.password())) {
+        if (!passwordEncoder.match(request.password(), admin.getPassword())) {
             throw new AuthException();
         }
         admin.updatePassword(passwordEncoder.encode(request.password()));
@@ -46,10 +48,10 @@ public class AdminService {
 
     public MemberTokens login(AdminRequest request) {
         Admin admin = adminRepository.findByLoginId(request.loginId()).orElseThrow(MemberNotFoundException::new);
-        if (!passwordEncoder.match(admin.getPassword(), request.password())) {
+        if (!passwordEncoder.match(request.password(), admin.getPassword())) {
             throw new AuthException();
         }
-        MemberTokens memberTokens = jwtProvider.generateLoginToken(admin.getAdminId().toString());
+        MemberTokens memberTokens = jwtProvider.generateLoginToken(admin.getAdminId().toString(), ADMIN);
         refreshTokenRepository.save(new RefreshToken(memberTokens.refreshToken(), admin.getAdminId()));
         return memberTokens;
     }
@@ -58,7 +60,7 @@ public class AdminService {
         String accessToken = bearerExtractor.extractAccessToken(authorizationHeader);
         if (jwtProvider.checkValidRefreshAndInvalidAccess(refreshToken, accessToken)) {
             RefreshToken findRefreshToken = refreshTokenRepository.findById(refreshToken).orElseThrow(InvalidJwtException::new);
-            return jwtProvider.regenerateAccessToke(findRefreshToken.memberId().toString());
+            return jwtProvider.regenerateAccessToken(findRefreshToken.memberId().toString(), ADMIN);
         }
         if (jwtProvider.checkValidRefreshAndAccess(refreshToken, accessToken)) {
             return accessToken;

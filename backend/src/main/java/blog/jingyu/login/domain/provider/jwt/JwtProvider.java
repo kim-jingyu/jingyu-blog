@@ -1,5 +1,6 @@
 package blog.jingyu.login.domain.provider.jwt;
 
+import blog.jingyu.login.domain.auth.Authority;
 import blog.jingyu.login.domain.token.MemberTokens;
 import blog.jingyu.login.exception.ExpiredPeriodJwtException;
 import blog.jingyu.login.exception.InvalidJwtException;
@@ -34,15 +35,17 @@ public class JwtProvider {
         this.refreshExTime = refreshExTime;
     }
 
-    public MemberTokens generateLoginToken(String subject) {
-        return new MemberTokens(createToken(subject, accessExTime), createToken("", refreshExTime));
+    public MemberTokens generateLoginToken(String subject, Authority authority) {
+        String accessToken = createToken(subject, accessExTime, authority.name());
+        return new MemberTokens(accessToken, createToken("", refreshExTime, authority.name()));
     }
 
-    private String createToken(String subject, Long exTime) {
+    private String createToken(String subject, Long exTime, String role) {
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam(TYPE, JWT_TYPE)
                 .setSubject(subject)
+                .claim("role", role)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + exTime))
                 .signWith(secretKey, HS256)
@@ -60,8 +63,8 @@ public class JwtProvider {
                 .getSubject();
     }
 
-    public String regenerateAccessToke(String subject) {
-        return createToken(subject, accessExTime);
+    public String regenerateAccessToken(String subject, Authority authority) {
+        return createToken(subject, accessExTime, authority.name());
     }
 
     public boolean checkValidRefreshAndInvalidAccess(String refreshToken, String accessToken) {
