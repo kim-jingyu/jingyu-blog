@@ -28,7 +28,7 @@ jobs:
 
     - name: Build with Gradle
       working-directory: backend
-      run: ./gradlew build -x test
+      run: ./gradlew bootJar -x test
 
     - name: Create SSH directory
       run: |
