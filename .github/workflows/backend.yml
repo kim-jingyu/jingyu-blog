@@ -30,6 +30,10 @@ jobs:
       working-directory: backend
       run: ./gradlew build -x test
 
+    - name: Add EC2 to known hosts
+      run: |
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
     - name: Deploy to EC2
       env:
         EC2_HOST: ${{ secrets.EC2_HOST }}
