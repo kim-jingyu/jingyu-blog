@@ -13,6 +13,10 @@ java {
 	}
 }
 
+jar {
+	archiveFileName = 'jingyulog.jar'
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
