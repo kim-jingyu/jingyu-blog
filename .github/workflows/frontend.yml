@@ -1,0 +1,41 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js v22.9.0
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22.9.0'
+
+    - name: Create .env file from secrets
+      run: |
+        echo "${{ secrets.APPLICATION }}" > frontend/.env
+
+    - name: Install dependencies
+      working-directory: frontend
+      run: npm install
+
+    - name: Build with Vite
+      working-directory: frontend
+      run: npm run build
+
+    - name: Deploy to EC2
+      env:
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+        EC2_KEY: ${{ secrets.EC2_KEY }}
+      run: |
+        echo "${EC2_KEY}" > ec2_key.pem
+        chmod 400 ec2_key.pem
+        scp -i ec2_key.pem -r frontend/dist/* ${EC2_USER}@${EC2_HOST}:/var/www/html/
