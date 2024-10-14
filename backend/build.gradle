@@ -15,7 +15,6 @@ java {
 
 bootJar {
 	archiveFileName = 'jingyulog.jar'
-	mainClass = 'blog.jingyu.JingyuApplication'
 }
 
 configurations {
