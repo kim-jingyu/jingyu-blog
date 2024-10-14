@@ -120,4 +120,5 @@ class PostServiceTest {
         assertThat(postResponse.hashtags().size()).isEqualTo(2);
         assertThat(postResponse.hashtags().get(0).content()).isEqualTo("변경된 해시태그1");
     }
+
 }
