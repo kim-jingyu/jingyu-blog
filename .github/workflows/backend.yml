@@ -28,7 +28,7 @@ jobs:
 
     - name: Build with Gradle
       working-directory: backend
-      run: ./gradlew build -Dspring.profiles.active=test
+      run: ./gradlew build -x test
 
     - name: Deploy to EC2
       env:
