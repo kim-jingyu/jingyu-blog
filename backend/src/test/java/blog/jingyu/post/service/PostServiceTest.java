@@ -3,8 +3,8 @@ package blog.jingyu.post.service;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
+//@SpringBootTest
+//@Transactional
 class PostServiceTest {
 //    @Autowired
 //    private PostService postService;
