@@ -48,4 +48,4 @@ jobs:
         echo "${EC2_KEY}" > ec2_key.pem
         chmod 400 ec2_key.pem
         scp -i ec2_key.pem backend/build/libs/jingyulog.jar ${EC2_USER}@${EC2_HOST}:/home/${EC2_USER}/jingyulog.jar
-        ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} "sudo systemctl restart jingyulog-service"
+        ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} "sudo systemctl restart jingyulog"
