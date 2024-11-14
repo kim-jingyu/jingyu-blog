@@ -7,6 +7,6 @@ import org.springframework.data.redis.core.RedisHash;
 public record RefreshToken(
         @Id
         String token,
-        Long memberId
+        String memberId
 ) {
 }

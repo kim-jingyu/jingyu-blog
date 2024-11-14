@@ -27,20 +27,20 @@ public class PostController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable("id") String id) {
         return ResponseEntity.ok()
                 .body(postService.getPostDetail(id));
     }
 
     @AdminOnly
     @PostMapping
-    public ResponseEntity<Long> makePost(@AdminCheck Accessor accessor, @RequestBody PostRequest postRequest) {
+    public ResponseEntity<String> makePost(@AdminCheck Accessor accessor, @RequestBody PostRequest postRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postService.makePost(accessor.getMemberId(), postRequest));
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<PostResponse> editPost(@PathVariable("id") Long id, @RequestBody PostEditRequest postEditRequest) {
+    public ResponseEntity<PostResponse> editPost(@PathVariable("id") String id, @RequestBody PostEditRequest postEditRequest) {
         return ResponseEntity.ok()
                 .body(postService.editPost(id, postEditRequest));
     }

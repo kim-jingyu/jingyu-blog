@@ -28,20 +28,20 @@ public class PostService {
         return postRepository.findAllPost(PageRequest.of(page, 5, Sort.Direction.ASC, "postId"));
     }
 
-    public PostDetailResponse getPostDetail(Long postId) {
+    public PostDetailResponse getPostDetail(String postId) {
         return new PostDetailResponse(postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new));
     }
 
     @Transactional
-    public Long makePost(Long adminId, PostRequest postRequest) {
+    public String makePost(String adminId, PostRequest postRequest) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(MemberNotFoundException::new);
         System.out.println("postRequest.contents() = " + postRequest.contents());
         return postRepository.save(Post.createPost(admin, postRequest)).getPostId();
     }
 
     @Transactional
-    public PostResponse editPost(Long postId, PostEditRequest postEditRequest) {
+    public PostResponse editPost(String postId, PostEditRequest postEditRequest) {
         return new PostResponse(postRepository.getById(postId).editPost(postEditRequest));
     }
 }

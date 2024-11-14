@@ -67,8 +67,8 @@ function Login() {
             </Links>
           </Options>
           <SocialLogin>
-            <GoogleButton>구글 로그인</GoogleButton>
-            <KakaoButton>카카오 로그인</KakaoButton>
+            <GoogleButton style={{ textDecoration: 'none' }}>구글 로그인</GoogleButton>
+            <KakaoButton style={{ textDecoration: 'none' }}>카카오 로그인</KakaoButton>
           </SocialLogin>
         </LoginContainer>
       </LoginWrapper>

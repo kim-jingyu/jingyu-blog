@@ -6,7 +6,6 @@ const Post = ({ title, date, content, onClick }) => {
         <PostContainer onClick={onClick}>
             <Title>{title}</Title>
             <Date>{date}</Date>
-            <Content>{content}</Content>
         </PostContainer>
     )
 }

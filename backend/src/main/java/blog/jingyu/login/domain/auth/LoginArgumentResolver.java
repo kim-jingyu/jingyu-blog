@@ -50,7 +50,7 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
             String accessToken = bearerExtractor.extractAccessToken(webRequest.getHeader(AUTHORIZATION));
             jwtProvider.validateTokens(new MemberTokens(accessToken, refreshToken));
 
-            Long memberId = Long.valueOf(jwtProvider.getSubject(accessToken));
+            String memberId = String.valueOf(jwtProvider.getSubject(accessToken));
             if (!memberRepository.existsById(memberId)) {
                 throw new MemberNotFoundException();
             }

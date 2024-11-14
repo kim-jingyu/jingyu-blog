@@ -25,14 +25,14 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping
-    public ResponseEntity<Long> createAdmin(@RequestBody @Validated AdminRequest request) {
+    public ResponseEntity<String> createAdmin(@RequestBody @Validated AdminRequest request) {
         return ResponseEntity.status(CREATED)
                 .body(adminService.createAdmin(request));
     }
 
     @AdminOnly
     @PatchMapping(value = "/password")
-    public ResponseEntity<Long> updatePassword(@AdminCheck Accessor accessor, @RequestBody @Validated AdminPwUpdateRequest request) {
+    public ResponseEntity<String> updatePassword(@AdminCheck Accessor accessor, @RequestBody @Validated AdminPwUpdateRequest request) {
         return ResponseEntity.ok().body(adminService.updatePassword(accessor.getMemberId(), request));
     }
 
