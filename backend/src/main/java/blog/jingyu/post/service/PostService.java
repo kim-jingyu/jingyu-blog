@@ -25,7 +25,8 @@ public class PostService {
     private final AdminRepository adminRepository;
 
     public Page<PostResponse> getPosts(int page) {
-        return postRepository.findAllPost(PageRequest.of(page, 5, Sort.Direction.ASC, "postId"));
+        Page<Post> allPost = postRepository.findAll(PageRequest.of(page, 5, Sort.Direction.ASC, "postId"));
+        return allPost.map(PostResponse::new);
     }
 
     public PostDetailResponse getPostDetail(String postId) {

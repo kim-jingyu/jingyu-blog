@@ -22,8 +22,9 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<Page<PostResponse>> getPosts(@RequestParam(value = "page", defaultValue = "0", required = false) int page) {
+        Page<PostResponse> posts = postService.getPosts(page);
         return ResponseEntity.ok()
-                .body(postService.getPosts(page));
+                .body(posts);
     }
 
     @GetMapping(value = "/{id}")
