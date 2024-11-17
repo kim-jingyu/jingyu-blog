@@ -1,0 +1,5 @@
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    access-expiration-time: ${JWT_AC_EX_TIME}
+    refresh-expiration-time: ${JWT_RE_EX_TIME}

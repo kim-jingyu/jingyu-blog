@@ -16,6 +16,7 @@ function MainList() {
 
     const fetchPostsLoadable = useRecoilValueLoadable(fetchPostSelector);
 
+    console.log(posts);
     const loadMorePosts = async () => {
         try {
             if (fetchPostsLoadable.state === 'hasValue') {

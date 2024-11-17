@@ -3,16 +3,17 @@ package blog.jingyu.post.controller;
 import blog.jingyu.admin.domain.AdminCheck;
 import blog.jingyu.admin.domain.AdminOnly;
 import blog.jingyu.login.domain.auth.Accessor;
-import blog.jingyu.post.dto.PostDetailResponse;
-import blog.jingyu.post.dto.PostEditRequest;
-import blog.jingyu.post.dto.PostRequest;
-import blog.jingyu.post.dto.PostResponse;
+import blog.jingyu.post.dto.*;
 import blog.jingyu.post.service.PostService;
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult;
+import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URL;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +39,26 @@ public class PostController {
     public ResponseEntity<String> makePost(@AdminCheck Accessor accessor, @RequestBody PostRequest postRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postService.makePost(accessor.getMemberId(), postRequest));
+    }
+
+    @PostMapping("/initiate-upload")
+    public ResponseEntity<InitiateMultipartUploadResult> initiateUpload(@RequestBody PreSignedUploadInitiateRequest request) {
+        return ResponseEntity.ok(postService.initiateMultipartUpload(request));
+    }
+
+    @PostMapping("/presigned-url")
+    public ResponseEntity<URL> generatePresignedUrl(@RequestBody PreSignedUrlCreateRequest request) {
+        return ResponseEntity.ok(postService.generatePresignedUrl(request));
+    }
+
+    @PostMapping("/complete-upload")
+    public ResponseEntity<CompleteMultipartUploadResult> completeUpload(@RequestBody CompleteUploadRequest request) {
+        return ResponseEntity.ok(postService.completeMultipartUpload(request));
+    }
+
+    @PostMapping("/abort-upload")
+    public void abortMultipartUpload(@RequestBody PreSignedUrlAbortRequest request) {
+        postService.abortMultipartUpload(request);
     }
 
     @PatchMapping(value = "/{id}")

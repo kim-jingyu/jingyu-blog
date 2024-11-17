@@ -1,7 +1,7 @@
-import { Content, Date, PostContainer, Title } from "./Post.style"
+import { Date, PostContainer, Title } from "./Post.style"
 import PropTypes from 'prop-types'
 
-const Post = ({ title, date, content, onClick }) => {
+const Post = ({ title, date, onClick }) => {
     return (
         <PostContainer onClick={onClick}>
             <Title>{title}</Title>
@@ -15,6 +15,5 @@ export default Post
 Post.propTypes = {
     title: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
     onClick: PropTypes.func.func
 }

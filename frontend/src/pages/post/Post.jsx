@@ -12,6 +12,85 @@ const Post = () => {
     const [hashtag, setHashtag] = useState('');
     const navigate = useNavigate();
 
+    const handleFileUpload = async (file) => {
+        const partSize = 5 * 1024 * 1024;
+        const totalParts = Math.ceil(file.size / partSize);
+        let uploadId = null;
+        const objectKey = `post/${crypto.randomUUID()}_${file.name}`;
+
+        try {
+            const initResponse = await privateApi.post('/post/initiate-upload', 
+                {
+                    originalFileName: file.name,
+                    fileType: file.type,
+                    fileSize: file.size
+                }
+            );
+            uploadId = initResponse.data.uploadId;
+
+            console.log('uploadId: ', uploadId);
+
+            const parts = [];
+
+            for (let partNum = 1; partNum <= totalParts; partNum++) {
+                const start = (partNum - 1) * partSize;
+                const end = Math.min(partNum * partSize, file.size);
+                const filePart = file.slice(start, end);
+
+                const presignedUrlResponse = await privateApi.post('/post/presigned-url',
+                    {
+                        objectKey: objectKey,
+                        uploadId,
+                        partNum
+                    }
+                );
+
+                console.log('Presigned URL:', presignedUrlResponse.data);
+
+                const uploadResponse = await fetch(presignedUrlResponse.data, 
+                    {
+                        method: 'PUT',
+                        headers: { 'Content-Type': file.type },
+                        body: filePart
+                    }
+                );
+                
+                if (!uploadResponse.ok) {
+                    throw new Error(`파일 ${partNum} 업로드 실패`);
+                }
+
+                const eTag = uploadResponse.headers.get('ETag');
+                parts.push({ partNum, eTag });
+            }
+
+            const completeResponse = await privateApi.post('/post/complete-upload',
+                {
+                    objectKey: objectKey,
+                    uploadId,
+                    parts
+                }
+            )
+
+            const imageUrl = `https://jingyulog.s3.amazonaws.com/${completeResponse.data.objectKey}`;
+            return imageUrl;
+        } catch (error) {
+            console.log('이미지 업로드 에러: ', error);
+
+            if (uploadId) {
+                try {
+                    await privateApi.post('/post/abort-upload', {
+                        objectKey: objectKey,
+                        uploadId
+                     });
+                } catch (error) {
+                    console.error('업로드 취소 실패: ', error);
+                }
+            }
+
+            return null;
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -54,7 +133,8 @@ const Post = () => {
                 <MarkdownEditor
                     style={{ height: '400px' }}
                     value={contents}
-                    onChange={({ text }) => setContents(text)}  // Markdown content 관리
+                    onChange={({ text }) => setContents(text)}
+                    onImageUpload={handleFileUpload}
                 />
                 <HashtagInput 
                     placeholder="해시태그를 입력하고 Enter를 누르세요" 

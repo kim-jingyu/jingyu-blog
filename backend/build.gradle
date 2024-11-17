@@ -39,6 +39,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.778'
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	implementation 'org.mindrot:jbcrypt:0.4'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
