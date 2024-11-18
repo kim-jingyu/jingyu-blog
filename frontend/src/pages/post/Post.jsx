@@ -16,19 +16,18 @@ const Post = () => {
         const partSize = 5 * 1024 * 1024;
         const totalParts = Math.ceil(file.size / partSize);
         let uploadId = null;
-        const objectKey = `post/${crypto.randomUUID()}_${file.name}`;
+        const objectName = `post/${crypto.randomUUID()}_${file.name}`;
 
         try {
             const initResponse = await privateApi.post('/post/initiate-upload', 
                 {
+                    objectName: objectName,
                     originalFileName: file.name,
                     fileType: file.type,
                     fileSize: file.size
                 }
             );
             uploadId = initResponse.data.uploadId;
-
-            console.log('uploadId: ', uploadId);
 
             const parts = [];
 
@@ -39,13 +38,11 @@ const Post = () => {
 
                 const presignedUrlResponse = await privateApi.post('/post/presigned-url',
                     {
-                        objectKey: objectKey,
+                        objectName,
                         uploadId,
                         partNum
                     }
                 );
-
-                console.log('Presigned URL:', presignedUrlResponse.data);
 
                 const uploadResponse = await fetch(presignedUrlResponse.data, 
                     {
@@ -65,7 +62,7 @@ const Post = () => {
 
             const completeResponse = await privateApi.post('/post/complete-upload',
                 {
-                    objectKey: objectKey,
+                    objectName,
                     uploadId,
                     parts
                 }
@@ -79,7 +76,7 @@ const Post = () => {
             if (uploadId) {
                 try {
                     await privateApi.post('/post/abort-upload', {
-                        objectKey: objectKey,
+                        objectName,
                         uploadId
                      });
                 } catch (error) {

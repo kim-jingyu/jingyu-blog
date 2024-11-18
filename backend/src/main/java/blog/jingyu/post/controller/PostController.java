@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URL;
@@ -47,7 +48,7 @@ public class PostController {
     }
 
     @PostMapping("/presigned-url")
-    public ResponseEntity<URL> generatePresignedUrl(@RequestBody PreSignedUrlCreateRequest request) {
+    public ResponseEntity<URL> generatePresignedUrl(@Validated @RequestBody PreSignedUrlCreateRequest request) {
         return ResponseEntity.ok(postService.generatePresignedUrl(request));
     }
 

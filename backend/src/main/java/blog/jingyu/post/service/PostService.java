@@ -54,19 +54,19 @@ public class PostService {
 
     public InitiateMultipartUploadResult initiateMultipartUpload(PreSignedUploadInitiateRequest request) {
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(Long.parseLong(request.fileSize()));
+        objectMetadata.setContentLength(request.fileSize());
         objectMetadata.setContentType(request.fileType());
 
         return s3Config.amazonS3Client().initiateMultipartUpload(new InitiateMultipartUploadRequest(
                 s3Config.getBucket(),
-                request.originalFileName(),
+                request.objectName(),
                 objectMetadata
         ));
     }
 
 
     public URL generatePresignedUrl(PreSignedUrlCreateRequest request) {
-        GeneratePresignedUrlRequest presignedUrlRequest = new GeneratePresignedUrlRequest(s3Config.getBucket(), request.objectKey())
+        GeneratePresignedUrlRequest presignedUrlRequest = new GeneratePresignedUrlRequest(s3Config.getBucket(), request.objectName())
                 .withMethod(PUT)
                 .withExpiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000));
 
@@ -85,7 +85,7 @@ public class PostService {
 
         return s3Config.amazonS3Client().completeMultipartUpload(new CompleteMultipartUploadRequest(
                 s3Config.getBucket(),
-                request.objectKey(),
+                request.objectName(),
                 request.uploadId(),
                 partETags
         ));
