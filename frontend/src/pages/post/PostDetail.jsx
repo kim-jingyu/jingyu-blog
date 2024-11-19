@@ -33,7 +33,7 @@ const PostDetail = () => {
             <Title>{post.title}</Title>
             <DateInfo>{new Date(post.date).toLocaleString('ko-KR')}</DateInfo>
             {/* Markdown 렌더링 */}
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+            <ReactMarkdown components={{img: ({ src, alt }) => <img src={src} alt={alt} style={{ maxWidth: '100%' }} />}}>{post.content}</ReactMarkdown>
             <HashtagList>
                 {post.hashtags.map((hashtag, index) => (
                     <HashtagItem key={index}>#{hashtag.content}</HashtagItem>

@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PostContainer, InputField, Button, HashtagInput, HashtagList, HashtagItem } from './Post.style';
 import { privateApi } from '../../apis/axiosInstance';
-import MarkdownEditor from 'react-markdown-editor-lite';
-import 'react-markdown-editor-lite/lib/index.css';
+import MDEditor from '@uiw/react-md-editor';
 
 const Post = () => {
     const [title, setTitle] = useState('');
-    const [contents, setContents] = useState('');  // Markdown content
+    const [contents, setContents] = useState('');
     const [hashtags, setHashtags] = useState([]);
     const [hashtag, setHashtag] = useState('');
     const navigate = useNavigate();
@@ -68,8 +67,7 @@ const Post = () => {
                 }
             )
 
-            const imageUrl = `https://jingyulog.s3.amazonaws.com/${completeResponse.data.objectKey}`;
-            return imageUrl;
+            return `https://jingyulog.s3.amazonaws.com/${completeResponse.data.key}`;
         } catch (error) {
             console.log('이미지 업로드 에러: ', error);
 
@@ -85,6 +83,21 @@ const Post = () => {
             }
 
             return null;
+        }
+    }
+
+    const handlePaste = async (e) => {
+        const items = e.clipBoardData.items;
+        for (const item in items) {
+            if (item.type.indexOf('image') !== -1) {
+                const file = item.getAsFile();
+                if (file) {
+                    const imageUrl = await handleFileUpload(file);
+                    if (imageUrl) {
+                        setContents((prev) => `${prev}\n![Image](${imageUrl})\n`);
+                    }
+                }
+            }
         }
     }
 
@@ -126,12 +139,26 @@ const Post = () => {
                     value={title} 
                     onChange={(e) => setTitle(e.target.value)} 
                 />
-                {/* 마크다운 에디터 */}
-                <MarkdownEditor
-                    style={{ height: '400px' }}
+                <MDEditor
                     value={contents}
-                    onChange={({ text }) => setContents(text)}
-                    onImageUpload={handleFileUpload}
+                    onChange={setContents}
+                    onDrop={async (e) => {
+                        e.preventDefault();
+                        const file = e.dataTransfer.files[0]; // 드래그한 파일 가져오기
+                
+                        if (file && file.type.startsWith('image/')) {
+                            const imageUrl = await handleFileUpload(file); // AWS Multipart Presigned URL 방식 업로드
+                            if (imageUrl) {
+                                // 성공 시 Markdown에 이미지 삽입
+                                setContents((prevContents) => `${prevContents}\n![Image](${imageUrl})\n`);
+                            } else {
+                                alert('이미지 업로드 실패');
+                            }
+                        } else {
+                            alert('이미지 파일만 업로드할 수 있습니다.');
+                        }
+                    }}
+                    onPaste={handlePaste}
                 />
                 <HashtagInput 
                     placeholder="해시태그를 입력하고 Enter를 누르세요" 
