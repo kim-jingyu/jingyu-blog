@@ -42,7 +42,7 @@ public class Post extends BaseEntity {
     private List<Comments> comments = new ArrayList<>();
 
     public static Post createPost(Admin admin, PostRequest postRequest) {
-        Post post = Post.builder()
+        return Post.builder()
                 .title(postRequest.title())
                 .contents(postRequest.contents())
                 .hashtags(postRequest.hashtags().stream()
@@ -50,8 +50,6 @@ public class Post extends BaseEntity {
                         .toList())
                 .admin(admin)
                 .build();
-        post.getHashtags().forEach(hashtag -> hashtag.setPost(post));
-        return post;
     }
 
     public Post editPost(PostEditRequest postEditRequest) {

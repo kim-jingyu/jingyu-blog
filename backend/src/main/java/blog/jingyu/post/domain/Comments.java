@@ -2,6 +2,7 @@ package blog.jingyu.post.domain;
 
 import blog.jingyu.global.entity.BaseEntity;
 import blog.jingyu.member.domain.Member;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,5 +23,6 @@ public class Comments extends BaseEntity {
     private Member member;
 
     @Setter
+    @JsonIgnore
     private Post post;
 }

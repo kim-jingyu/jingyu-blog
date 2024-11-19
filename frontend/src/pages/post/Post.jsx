@@ -109,11 +109,11 @@ const Post = () => {
         try {
             const response = await privateApi.post('/post', {
                 title,
-                contents,  // Markdown 내용 전송
+                contents,
                 hashtags: hashtagObjects
             });
             if (response.status === 201) {
-                navigate('/');  // 게시글 작성 후 홈으로 이동
+                navigate('/');
             }
         } catch (error) {
             console.error('글 작성 에러:', error);
@@ -121,9 +121,11 @@ const Post = () => {
     };
 
     const handleAddHashtag = (e) => {
-        if (e.key === 'Enter' && hashtag.trim()) {
-            setHashtags([...hashtags, hashtag.trim()]);
-            setHashtag('');  // 입력창 초기화
+        if (e.key === ' ' && hashtag.trim()) {
+            if (!hashtags.includes(hashtag.trim())) {
+                setHashtags((prevHashtags) => [...prevHashtags, hashtag.trim()]);
+            }
+            setHashtag('');
         }
     };
 
@@ -144,12 +146,11 @@ const Post = () => {
                     onChange={setContents}
                     onDrop={async (e) => {
                         e.preventDefault();
-                        const file = e.dataTransfer.files[0]; // 드래그한 파일 가져오기
+                        const file = e.dataTransfer.files[0];
                 
                         if (file && file.type.startsWith('image/')) {
-                            const imageUrl = await handleFileUpload(file); // AWS Multipart Presigned URL 방식 업로드
+                            const imageUrl = await handleFileUpload(file);
                             if (imageUrl) {
-                                // 성공 시 Markdown에 이미지 삽입
                                 setContents((prevContents) => `${prevContents}\n![Image](${imageUrl})\n`);
                             } else {
                                 alert('이미지 업로드 실패');
@@ -161,7 +162,7 @@ const Post = () => {
                     onPaste={handlePaste}
                 />
                 <HashtagInput 
-                    placeholder="해시태그를 입력하고 Enter를 누르세요" 
+                    placeholder="해시태그를 입력하고 Space를 누르세요" 
                     value={hashtag} 
                     onChange={(e) => setHashtag(e.target.value)} 
                     onKeyDown={handleAddHashtag} 

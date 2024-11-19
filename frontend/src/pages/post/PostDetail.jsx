@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { privateApi } from '../../apis/axiosInstance';
 import { PostContainer, Title, DateInfo, HashtagList, HashtagItem } from './PostDetail.style';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';  // GFM(Github Flavored Markdown) 플러그인
+import MDEditor from '@uiw/react-md-editor';
 
 const PostDetail = () => {
     const { postId } = useParams();  // URL 파라미터에서 postId 가져오기
@@ -32,8 +31,7 @@ const PostDetail = () => {
         <PostContainer>
             <Title>{post.title}</Title>
             <DateInfo>{new Date(post.date).toLocaleString('ko-KR')}</DateInfo>
-            {/* Markdown 렌더링 */}
-            <ReactMarkdown components={{img: ({ src, alt }) => <img src={src} alt={alt} style={{ maxWidth: '100%' }} />}}>{post.content}</ReactMarkdown>
+            <MDEditor.Markdown source={post.content} />
             <HashtagList>
                 {post.hashtags.map((hashtag, index) => (
                     <HashtagItem key={index}>#{hashtag.content}</HashtagItem>
