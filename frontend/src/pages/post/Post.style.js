@@ -1,3 +1,4 @@
+import MDEditor from '@uiw/react-md-editor';
 import styled from 'styled-components';
 
 // 전체 컨테이너
@@ -6,7 +7,7 @@ export const PostContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 600px;
+    height: 1200px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fafafa;
@@ -29,27 +30,66 @@ export const InputField = styled.input`
     }
 `;
 
-// 텍스트 영역 스타일 (내용 작성 필드)
-export const TextArea = styled.textarea`
-    width: 100%;
-    height: 150px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #dbdbdb;
-    border-radius: 4px;
+export const StyledMDEditor = styled(MDEditor)`
+  width: 100%;
+  min-height: 900px;
+  max-height: 900px;
+  margin: 0 auto;
+
+  .w-md-editor {
+    min-height: 900px;
+    max-height: 900px;
+  }
+
+  .w-md-editor-content {
+    min-height: 800px;
+    max-height: 900px;
+    overflow-y: auto;
+  }
+
+  /* 툴바 스타일 */
+  .w-md-editor-toolbar {
+    background: #0095f6;
+    border-bottom: 2px solid #0095f6;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .w-md-editor-toolbar button {
+    background: white;
+    color: #4caf50;
+    border: 1px solid #0095f6;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .w-md-editor-toolbar button:hover {
+    background: #4caf50;
+    color: white;
+  }
+
+  /* 텍스트 입력 영역 스타일 */
+  .w-md-editor-content {
+    font-family: "Arial, sans-serif";
     font-size: 16px;
+    line-height: 1.6;
+    padding: 15px;
     background-color: #fff;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .w-md-editor-content:focus {
     outline: none;
-    resize: none;
-    &:focus {
-        border-color: #0095f6;
-    }
+    border: 2px solid #4caf50;
+  }
 `;
 
 // 해시태그 입력 필드
 export const HashtagInput = styled.input`
     width: 100%;
     padding: 10px;
+    margin-top: 10px;
     margin-bottom: 10px;
     border: 1px solid #dbdbdb;
     border-radius: 4px;

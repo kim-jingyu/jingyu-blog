@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 
 export const PostContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 20px;
     margin: 0 auto;
     width: 1000px;
-    min-height: 500px;
+    height: 100%;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -29,6 +32,8 @@ export const DateInfo = styled.div`
 export const HashtagList = styled.div`
     display: flex;
     flex-wrap: wrap;
+    margin-top: 20px; /* 본문과 간격 */
+    justify-content: flex-start; /* 좌측 정렬 */
 `;
 
 export const HashtagItem = styled.span`

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PostContainer, InputField, Button, HashtagInput, HashtagList, HashtagItem } from './Post.style';
+import { PostContainer, InputField, Button, HashtagInput, HashtagList, HashtagItem, StyledMDEditor } from './Post.style';
 import { privateApi } from '../../apis/axiosInstance';
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor, { commands } from '@uiw/react-md-editor';
 
 const Post = () => {
     const [title, setTitle] = useState('');
@@ -101,22 +101,63 @@ const Post = () => {
         }
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const hashtagObjects = hashtags.map(tag => ({ content: tag }));
-
-        try {
-            const response = await privateApi.post('/post', {
-                title,
-                contents,
-                hashtags: hashtagObjects
-            });
-            if (response.status === 201) {
-                navigate('/');
+    const uploadImageCommand = {
+        name: "imageUpload",
+        keyCommand: "imageUpload",
+        buttonProps: { "aria-label": "이미지 업로드" },
+        icon: (
+          <span>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 1024 1024"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zM512 896c-212.1 0-384-171.9-384-384S299.9 128 512 128 896 299.9 896 512 724.1 896 512 896zM672 416c0-88.4-71.6-160-160-160s-160 71.6-160 160 71.6 160 160 160 160-71.6 160-160z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+        ),
+        execute: async (state, api) => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const imageUrl = await handleFileUpload(file);
+              if (imageUrl) {
+                api.replaceSelection(`![Image](${imageUrl})\n`);
+              } else {
+                alert("이미지 업로드 실패");
+              }
             }
-        } catch (error) {
-            console.error('글 작성 에러:', error);
+          };
+          input.click();
+        },
+      };
+
+    const handleSubmit = async (e) => {
+        if (e.key !== 'Enter') {
+            e.preventDefault();
+
+            const hashtagObjects = hashtags.map(tag => ({ content: tag }));
+
+            try {
+                const response = await privateApi.post('/post', {
+                    title,
+                    contents,
+                    hashtags: hashtagObjects
+                });
+                if (response.status === 201) {
+                    navigate('/');
+                }
+            } catch (error) {
+                console.error('글 작성 에러:', error);
+            }
         }
     };
 
@@ -141,9 +182,11 @@ const Post = () => {
                     value={title} 
                     onChange={(e) => setTitle(e.target.value)} 
                 />
-                <MDEditor
+                <StyledMDEditor
                     value={contents}
                     onChange={setContents}
+                    theme="dark"
+                    commands={[...commands.getCommands(), uploadImageCommand]}
                     onDrop={async (e) => {
                         e.preventDefault();
                         const file = e.dataTransfer.files[0];

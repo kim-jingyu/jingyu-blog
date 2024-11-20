@@ -51,7 +51,6 @@ function MainList() {
                     next={loadMorePosts}
                     hasMore={hasMore}
                     loader={<h4>Loading...</h4>}
-                    endMessage={<p>No More Posts</p>}
                 >
                     {posts.map((post) => (
                         <Post 
