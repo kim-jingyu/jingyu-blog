@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { privateApi } from '../../apis/axiosInstance';
 import { PostContainer, Title, DateInfo, HashtagList, HashtagItem, StyledMarkdown } from './PostDetail.style';
 import { useRecoilValue } from 'recoil';
-import { themeState } from '../../recoils/theme';
+import { themeState } from '../../recoils/Theme';
 
 const extractHeadings = (markdown) => {
     const headings = [];

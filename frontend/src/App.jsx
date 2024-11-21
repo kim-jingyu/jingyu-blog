@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom"
 import { darkTheme, GlobalStyle, lightTheme, OutletWrapper } from "./App.style"
 import { useRecoilValue } from "recoil"
-import { themeState } from "./recoils/theme"
+import { themeState } from "./recoils/Theme"
 import { ThemeProvider } from "styled-components";
 
 function App() {

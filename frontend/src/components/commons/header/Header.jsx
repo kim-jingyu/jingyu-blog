@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { privateApi } from "../../../apis/axiosInstance";
 import { useRecoilState } from "recoil";
-import { themeState } from "../../../recoils/theme";
+import { themeState } from "../../../recoils/Theme";
 
 function Header() {
     const navigate = useNavigate();
