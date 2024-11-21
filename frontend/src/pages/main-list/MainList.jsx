@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/commons/header/Header"
-import InfiniteScroll from 'react-infinite-scroll-component'
 import Post from "../../components/post/Post";
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { useRecoilState, useRecoilValueLoadable } from "recoil";
 import { fetchPostSelector, hasMoreState, pageState, postState } from "../../recoils/PostAtoms";
 import { useNavigate } from "react-router-dom";
