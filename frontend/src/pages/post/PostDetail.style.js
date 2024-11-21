@@ -1,3 +1,4 @@
+import MDEditor from '@uiw/react-md-editor';
 import styled from 'styled-components';
 
 export const PostContainer = styled.div`
@@ -5,10 +6,8 @@ export const PostContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-    margin: 0 auto;
+    margin-left: 20vh;
     width: 1000px;
-    height: 100%;
-    background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
@@ -18,9 +17,10 @@ export const Title = styled.h1`
     margin-bottom: 10px;
 `;
 
-export const Content = styled.p`
-    font-size: 18px;
-    margin-bottom: 20px;
+export const StyledMarkdown = styled(MDEditor.Markdown)`
+    background-color: ${({ backgroundColor }) => backgroundColor};
+    color: ${({ textColor }) => textColor};
+    padding: 20px;
 `;
 
 export const DateInfo = styled.div`

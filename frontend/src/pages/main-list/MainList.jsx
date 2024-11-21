@@ -46,30 +46,30 @@ function MainList() {
     return (
         <MainContainer>
             <Header />
-                <InfiniteScroll
-                    dataLength={posts.length}
-                    next={loadMorePosts}
-                    hasMore={hasMore}
-                    loader={<h4>Loading...</h4>}
-                >
-                    {posts.map((post) => (
-                        <Post 
-                            key={post.postId}
-                            title={post.title}
-                            date={new Date(post.date).toLocaleString('ko-KR', {
-                                timeZone: 'Asia/Seoul',
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                second: '2-digit'
-                            })}
-                            content={post.content}
-                            onClick={() => clickDetailPost(post.postId)}
-                        />
-                    ))}
-                </InfiniteScroll>
+            <InfiniteScroll
+                dataLength={posts.length}
+                next={loadMorePosts}
+                hasMore={hasMore}
+                loader={<h4>Loading...</h4>}
+            >
+                {posts.map((post) => (
+                    <Post 
+                        key={post.postId}
+                        title={post.title}
+                        date={new Date(post.date).toLocaleString('ko-KR', {
+                            timeZone: 'Asia/Seoul',
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        })}
+                        content={post.content}
+                        onClick={() => clickDetailPost(post.postId)}
+                    />
+                ))}
+            </InfiniteScroll>
         </MainContainer>
     )
 }

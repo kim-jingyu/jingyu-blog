@@ -5,14 +5,15 @@ export const HeaderContainer = styled.header`
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #f8f9fa;
+    margin: 20px;
 `
 
 export const Logo = styled.a`
     font-size: 24px;
     font-weight: bold;
-    color: #333;
     text-decoration: none;
+    background-color: ${({ themeStyle }) => themeStyle.backgroundColor};
+    color: ${({ themeStyle }) => themeStyle.textColor};
 `
 
 export const ButtonGroup = styled.div`
@@ -24,4 +25,9 @@ export const ButtonGroup = styled.div`
         cursor: pointer;
         border: none;
     }
+`
+
+export const Button = styled.button`
+    background-color: ${({ themeStyle }) => themeStyle.backgroundColor};
+    color: ${({ themeStyle }) => themeStyle.textColor};
 `

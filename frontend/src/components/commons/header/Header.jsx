@@ -1,13 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { ButtonGroup, HeaderContainer, Logo } from "./Header.style";
+import { Button, ButtonGroup, HeaderContainer, Logo } from "./Header.style";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { privateApi } from "../../../apis/axiosInstance";
+import { useRecoilState } from "recoil";
+import { themeState } from "../../../recoils/theme";
 
 function Header() {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState(null);
+    const [theme, setTheme] = useRecoilState(themeState);
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
@@ -21,6 +24,10 @@ function Header() {
             }
         }
     })
+
+    const changeTheme = () => {
+        setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    }
 
     const clickLoginButton = () => {
         navigate('/login');
@@ -44,21 +51,26 @@ function Header() {
             });
     }
 
+    const themeStyle = {
+        backgroundColor: theme === 'dark' ? '#292929' : '#fff',
+        textColor: theme === 'dark' ? '#fff' : '#000',
+    };
+
     return (
         <HeaderContainer>
-            <Logo href="/">jingyu's blog</Logo>
-            <ButtonGroup>
-                <button>Search</button>
-                <button>Theme</button>
-                {role === 'ADMIN' ? <button onClick={clickWriteButton}>Write</button> : null}
+            <Logo href="/" themeStyle={themeStyle}>진규의 블로그😜</Logo>
+            <ButtonGroup themeStyle={themeStyle}>
+                <Button themeStyle={themeStyle}>Search</Button>
+                <Button onClick={changeTheme} themeStyle={themeStyle}>Theme</Button>
+                {role === 'ADMIN' ? <Button onClick={clickWriteButton} themeStyle={themeStyle}>Write</Button> : null}
                 {isLoggedIn ? (
-                    <button onClick={clickLogoutButton}>
+                    <Button onClick={clickLogoutButton} themeStyle={themeStyle}>
                         Logout
-                    </button>
+                    </Button>
                 ) : (
-                    <button onClick={clickLoginButton}>
+                    <Button onClick={clickLoginButton} themeStyle={themeStyle}>
                         Login
-                    </button>
+                    </Button>
                 )}
             </ButtonGroup>
         </HeaderContainer>

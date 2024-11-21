@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { privateApi } from '../../apis/axiosInstance';
-import { PostContainer, Title, DateInfo, HashtagList, HashtagItem } from './PostDetail.style';
-import { StyledMDEditor } from './Post.style';
+import { PostContainer, Title, DateInfo, HashtagList, HashtagItem, StyledMarkdown } from './PostDetail.style';
+import { useRecoilValue } from 'recoil';
+import { themeState } from '../../recoils/theme';
 
 const extractHeadings = (markdown) => {
     const headings = [];
@@ -25,6 +26,7 @@ const PostDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [headings, setHeadings] = useState([]);
+    const theme = useRecoilValue(themeState);
 
     useEffect(() => {
         const fetchPostDetail = async () => {
@@ -52,14 +54,16 @@ const PostDetail = () => {
         }
     }
 
+    const backgroundColor = theme === 'dark' ? '#292929' : '#fff';
+    const textColor = theme === 'dark' ? '#fff' : '#000';
+
     return (
         <div style={{ display: 'flex', position: 'relative' }}>
-            {/* PostContainer와 콘텐츠 */}
             <PostContainer style={{ flex: 1 }}>
                 <div>
                     <Title>{post.title}</Title>
                     <DateInfo>{new Date(post.date).toLocaleString('ko-KR')}</DateInfo>
-                    <StyledMDEditor.Markdown source={post.content} />
+                    <StyledMarkdown source={post.content} backgroundColor={backgroundColor} textColor={textColor} />
                 </div>
                 <HashtagList>
                     {post.hashtags.map((hashtag, index) => (
@@ -68,7 +72,6 @@ const PostDetail = () => {
                 </HashtagList>
             </PostContainer>
 
-            {/* 네비게이션 바 */}
             <nav style={{
                 position: 'sticky',
                 top: '50px',
@@ -77,7 +80,6 @@ const PostDetail = () => {
                 maxHeight: '20vh',
                 overflowY: 'auto',
                 padding: '10px',
-                backgroundColor: 'white',
                 marginLeft: '10px'
             }}>
                 <ul style={{ listStyle: 'none', paddingLeft: '0px' }}>
