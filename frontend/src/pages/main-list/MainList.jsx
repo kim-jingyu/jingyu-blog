@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Header from "../../components/commons/header/Header"
 import Post from "../../components/post/Post";
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useRecoilState, useRecoilValueLoadable } from "recoil";
-import { fetchPostSelector, hasMoreState, pageState, postState } from "../../recoils/PostAtoms";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { fetchPostSelector, hasMoreState, pageState, postState, searchKeywordState, searchPostSelector } from "../../recoils/PostAtoms";
 import { useNavigate } from "react-router-dom";
 import { MainContainer } from "./MainList.style";
 
@@ -13,8 +13,9 @@ function MainList() {
     const [page, setPage] = useRecoilState(pageState);
     const [hasMore, setHasMore] = useRecoilState(hasMoreState);
     const navigate = useNavigate();
-
     const fetchPostsLoadable = useRecoilValueLoadable(fetchPostSelector);
+    const searchKeyword = useRecoilValue(searchKeywordState);
+    const searchResults = useRecoilValueLoadable(searchPostSelector);
 
     const loadMorePosts = async () => {
         try {
@@ -34,10 +35,13 @@ function MainList() {
     }
 
     useEffect(() => {
-        if (fetchPostsLoadable.state === 'hasValue') {
+        if (searchKeyword && searchResults.state === 'hasValue') {
+            setPosts(searchResults.contents);
+            setHasMore(false);
+        } else if (fetchPostsLoadable.state == 'hasValue') {
             loadMorePosts();
         }
-    }, [fetchPostsLoadable.state]);
+    }, [searchKeyword, searchResults.state, fetchPostsLoadable.state]);;
 
     const clickDetailPost = (postId) => {
         navigate(`/post/${postId}`);

@@ -5,12 +5,15 @@ import { jwtDecode } from "jwt-decode";
 import { privateApi } from "../../../apis/axiosInstance";
 import { useRecoilState } from "recoil";
 import { themeState } from "../../../recoils/Theme";
+import SearchBar from "../../search-bar/SearchBar";
 
 function Header() {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState(null);
     const [theme, setTheme] = useRecoilState(themeState);
+    const [searchVisible, setSearchVisible] = useState(false);
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
@@ -23,7 +26,7 @@ function Header() {
                 console.error("토큰 디코딩 에러:", error);
             }
         }
-    })
+    }, []);
 
     const changeTheme = () => {
         setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
@@ -51,6 +54,14 @@ function Header() {
             });
     }
 
+    const toggleSearch = () => {
+        setSearchVisible(prev => !prev); // 검색창 토글
+    };
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value); // 검색 입력값 업데이트
+    };
+
     const themeStyle = {
         backgroundColor: theme === 'dark' ? '#292929' : '#fff',
         textColor: theme === 'dark' ? '#fff' : '#000',
@@ -60,7 +71,10 @@ function Header() {
         <HeaderContainer>
             <Logo href="/" themeStyle={themeStyle}>진규의 블로그😜</Logo>
             <ButtonGroup themeStyle={themeStyle}>
-                <Button themeStyle={themeStyle}>Search</Button>
+                {searchVisible && (
+                    <SearchBar search={search} onChange={handleSearchChange} />
+                )}
+                <Button onClick={toggleSearch} themeStyle={themeStyle}>Search</Button>
                 <Button onClick={changeTheme} themeStyle={themeStyle}>Theme</Button>
                 {role === 'ADMIN' ? <Button onClick={clickWriteButton} themeStyle={themeStyle}>Write</Button> : null}
                 {isLoggedIn ? (

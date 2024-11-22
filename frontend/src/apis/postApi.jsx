@@ -19,3 +19,13 @@ export async function createPost(data) {
         throw error;
     }
 }
+
+export async function searchPost(keyword) {
+    try {
+        const response = await publicApi.get(`/post/search?keyword=${encodeURIComponent(keyword)}`);
+        return response.data;
+    } catch (error) {
+        console.error("글 검색에 실패했습니다.", error);
+        throw error;
+    }
+}

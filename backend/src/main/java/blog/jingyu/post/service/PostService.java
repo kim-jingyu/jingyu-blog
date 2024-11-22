@@ -99,4 +99,11 @@ public class PostService {
                 request.uploadId()
         ));
     }
+
+    public List<PostResponse> searchPosts(String keyword) {
+        List<Post> postList = postRepository.findByTitleContainingOrContentsContaining(keyword, keyword);
+        return postList.stream()
+                .map(PostResponse::new)
+                .toList();
+    }
 }

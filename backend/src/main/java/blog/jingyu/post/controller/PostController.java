@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URL;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -66,5 +67,11 @@ public class PostController {
     public ResponseEntity<PostResponse> editPost(@PathVariable("id") String id, @RequestBody PostEditRequest postEditRequest) {
         return ResponseEntity.ok()
                 .body(postService.editPost(id, postEditRequest));
+    }
+
+    @GetMapping(value = "/search")
+    public ResponseEntity<List<PostResponse>> searchPost(@RequestParam String keyword) {
+        return ResponseEntity.ok()
+                .body(postService.searchPosts(keyword));
     }
 }
