@@ -3,10 +3,14 @@ package blog.jingyu.post.service;
 import blog.jingyu.admin.domain.Admin;
 import blog.jingyu.admin.repository.AdminRepository;
 import blog.jingyu.global.config.S3Config;
+import blog.jingyu.member.domain.Member;
 import blog.jingyu.member.exception.MemberNotFoundException;
+import blog.jingyu.member.repository.MemberRepository;
+import blog.jingyu.post.domain.Comments;
 import blog.jingyu.post.domain.Post;
 import blog.jingyu.post.dto.*;
 import blog.jingyu.post.exception.PostNotFoundException;
+import blog.jingyu.post.repository.CommentsRepository;
 import blog.jingyu.post.repository.PostRepository;
 import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +30,10 @@ import static com.amazonaws.HttpMethod.PUT;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostService {
-    public static final String POST = "post";
     private final PostRepository postRepository;
+    private final CommentsRepository commentsRepository;
     private final AdminRepository adminRepository;
+    private final MemberRepository memberRepository;
     private final S3Config s3Config;
 
     public Page<PostResponse> getPosts(int page) {
@@ -37,8 +42,10 @@ public class PostService {
     }
 
     public PostDetailResponse getPostDetail(String postId) {
-        return new PostDetailResponse(postRepository.findById(postId)
-                .orElseThrow(PostNotFoundException::new));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+        PostDetailResponse postDetailResponse = new PostDetailResponse(post);
+        return postDetailResponse;
     }
 
     @Transactional
@@ -105,5 +112,15 @@ public class PostService {
         return postList.stream()
                 .map(PostResponse::new)
                 .toList();
+    }
+
+    @Transactional
+    public String makeComment(String memberId, CommentRequest commentRequest, String postId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        Comments savedComment = commentsRepository.save(Comments.createComment(member, commentRequest, post));
+        post.getComments().add(savedComment);
+        postRepository.save(post);
+        return savedComment.getCommentId();
     }
 }

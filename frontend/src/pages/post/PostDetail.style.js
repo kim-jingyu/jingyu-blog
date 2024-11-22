@@ -44,3 +44,39 @@ export const HashtagItem = styled.span`
     font-size: 14px;
     color: #333;
 `;
+
+export const CommentSection = styled.div`
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+`;
+
+export const CommentList = styled.ul`
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+`;
+
+export const CommentItem = styled.li`
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+
+    p {
+        margin: 0 0 5px;
+    }
+
+    small {
+        color: gray;
+        font-size: 0.8rem;
+    }
+`;
+
+export const AddCommentButton = styled.button`
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+`;

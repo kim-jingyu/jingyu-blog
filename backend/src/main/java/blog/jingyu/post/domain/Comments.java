@@ -2,9 +2,13 @@ package blog.jingyu.post.domain;
 
 import blog.jingyu.global.entity.BaseEntity;
 import blog.jingyu.member.domain.Member;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import blog.jingyu.post.dto.CommentRequest;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import static lombok.AccessLevel.PROTECTED;
@@ -22,7 +26,14 @@ public class Comments extends BaseEntity {
 
     private Member member;
 
-    @Setter
-    @JsonIgnore
+    @DBRef
     private Post post;
+
+    public static Comments createComment(Member member, CommentRequest commentRequest, Post post) {
+        return Comments.builder()
+                .content(commentRequest.content())
+                .post(post)
+                .member(member)
+                .build();
+    }
 }

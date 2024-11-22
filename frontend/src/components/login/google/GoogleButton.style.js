@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const SocialButton = styled.button`
-  width: 100%;
+  width: 93%;
   padding: 10px;
   font-size: 16px;
   border: none;

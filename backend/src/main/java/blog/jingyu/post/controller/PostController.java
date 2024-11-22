@@ -3,6 +3,8 @@ package blog.jingyu.post.controller;
 import blog.jingyu.admin.domain.AdminCheck;
 import blog.jingyu.admin.domain.AdminOnly;
 import blog.jingyu.login.domain.auth.Accessor;
+import blog.jingyu.member.domain.MemberCheck;
+import blog.jingyu.member.domain.MemberOnly;
 import blog.jingyu.post.dto.*;
 import blog.jingyu.post.service.PostService;
 import com.amazonaws.services.s3.model.CompleteMultipartUploadResult;
@@ -73,5 +75,12 @@ public class PostController {
     public ResponseEntity<List<PostResponse>> searchPost(@RequestParam String keyword) {
         return ResponseEntity.ok()
                 .body(postService.searchPosts(keyword));
+    }
+
+    @MemberOnly
+    @PostMapping(value = "/{id}/comments")
+    public ResponseEntity<String> makeComment(@MemberCheck Accessor accessor, @PathVariable("id") String id, @RequestBody CommentRequest commentRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postService.makeComment(accessor.getMemberId(), commentRequest, id));
     }
 }

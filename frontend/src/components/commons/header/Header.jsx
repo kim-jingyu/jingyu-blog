@@ -12,7 +12,6 @@ function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState(null);
     const [theme, setTheme] = useRecoilState(themeState);
-    const [searchVisible, setSearchVisible] = useState(false);
     const [search, setSearch] = useState("");
 
     useEffect(() => {
@@ -54,12 +53,8 @@ function Header() {
             });
     }
 
-    const toggleSearch = () => {
-        setSearchVisible(prev => !prev); // 검색창 토글
-    };
-
     const handleSearchChange = (e) => {
-        setSearch(e.target.value); // 검색 입력값 업데이트
+        setSearch(e.target.value);
     };
 
     const themeStyle = {
@@ -68,13 +63,10 @@ function Header() {
     };
 
     return (
-        <HeaderContainer>
+        <HeaderContainer themeStyle={themeStyle}>
             <Logo href="/" themeStyle={themeStyle}>진규의 블로그😜</Logo>
             <ButtonGroup themeStyle={themeStyle}>
-                {searchVisible && (
-                    <SearchBar search={search} onChange={handleSearchChange} />
-                )}
-                <Button onClick={toggleSearch} themeStyle={themeStyle}>Search</Button>
+                <SearchBar search={search} onChange={handleSearchChange} />
                 <Button onClick={changeTheme} themeStyle={themeStyle}>Theme</Button>
                 {role === 'ADMIN' ? <Button onClick={clickWriteButton} themeStyle={themeStyle}>Write</Button> : null}
                 {isLoggedIn ? (

@@ -7,7 +7,7 @@ export const LoginWrapper = styled.div`
 `
 
 export const LoginContainer = styled.div`
-    width: 100%;
+    width: 50vh;
     max-width: 400px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
