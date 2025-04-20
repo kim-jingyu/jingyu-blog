@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const KakaoLoginCallback = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Kakao 로그인 성공 시 리다이렉트되는 페이지
   // 마운트 되면 자동으로 서버에 로그인 요청을 보냄
@@ -13,7 +14,7 @@ const KakaoLoginCallback = () => {
     const code = params.get('code');
 
     if (code) {
-      fetch('http://localhost:8080/login/kakao', {
+      fetch(`${API_URL}:8080/login/kakao`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

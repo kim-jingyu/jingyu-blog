@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { SocialButton } from './GoogleButton.style';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_APP_GOOGLE_CLIENT_ID;
-const REDIRECT_URI = 'http://localhost:5173/google/callback'; // 클라이언트의 콜백 URI 설정
+const API_URL = import.meta.env.VITE_API_URL;
+const REDIRECT_URI = `${API_URL}/google/callback`;
 const SCOPE = 'https%3A//www.googleapis.com/auth/userinfo.profile';
 
 const GoogleButton = ({ children, ...attributes }) => {

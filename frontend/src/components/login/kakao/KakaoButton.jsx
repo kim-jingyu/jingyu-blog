@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { SocialButton } from './KakaoButton.style';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_APP_KAKAO_CLIENT_ID;
-const REDIRECT_URI = 'http://localhost:5173/kakao/callback'; // 클라이언트의 콜백 URI 설정
+const API_URL = import.meta.env.VITE_API_URL;
+const REDIRECT_URI = `${API_URL}/kakao/callback`;
 
 const KakaoButton = ({ children, ...attributes }) => {
   const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
