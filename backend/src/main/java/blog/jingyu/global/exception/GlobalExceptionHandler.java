@@ -1,6 +1,7 @@
 package blog.jingyu.global.exception;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,14 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static final String INTERNAL_SERVER_ERROR_MSG = "서버에서 에러가 발생했습니다.";
 
     @ExceptionHandler(JingyuException.class)
     public ResponseEntity<ErrorResponse> handleApplicationException(JingyuException exception) {
+        log.error(exception.getMessage());
         ErrorCode errorCode = exception.getErrorCode();
         return ResponseEntity.status(errorCode.status())
                 .body(ErrorResponse.builder()
@@ -33,6 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleServerException(Exception exception) {
+        log.error(exception.getMessage());
         return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.builder()
                         .message(INTERNAL_SERVER_ERROR_MSG)
