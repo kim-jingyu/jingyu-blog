@@ -14,7 +14,7 @@ const KakaoLoginCallback = () => {
     const code = params.get('code');
 
     if (code) {
-      fetch(`${API_URL}:8080/login/kakao`, {
+      fetch(`${API_URL}/api/login/kakao`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

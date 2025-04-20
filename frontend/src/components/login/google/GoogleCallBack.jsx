@@ -14,7 +14,7 @@ const GoogleLoginCallback = () => {
     const code = params.get('code');
 
     if (code) {
-      fetch(`${API_URL}:8080/login/google`, {
+      fetch(`${API_URL}/api/login/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
