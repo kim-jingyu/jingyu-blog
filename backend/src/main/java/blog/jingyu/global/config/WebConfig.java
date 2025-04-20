@@ -3,6 +3,7 @@ package blog.jingyu.global.config;
 import blog.jingyu.login.domain.auth.AdminArgumentResolver;
 import blog.jingyu.login.domain.auth.LoginArgumentResolver;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -13,6 +14,8 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+    @Value("${server.url}")
+    private String serverUrl;
     private final LoginArgumentResolver loginArgumentResolver;
     private final AdminArgumentResolver adminArgumentResolver;
 
@@ -25,7 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173")
+                .allowedOrigins(serverUrl)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization", "accessToken", "refreshToken")

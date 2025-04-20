@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: jwt, oauth2, aws
+    include: jwt, oauth2, aws, server
 
   data:
     mongodb:
