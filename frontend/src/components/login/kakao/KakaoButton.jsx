@@ -7,7 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const REDIRECT_URI = `${API_URL}/kakao/callback`;
 
 const KakaoButton = ({ children, ...attributes }) => {
-  const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
 
   // 클릭 시 kakaoAuthUrl로 get 요청
   return (

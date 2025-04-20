@@ -8,7 +8,7 @@ const REDIRECT_URI = `${API_URL}/google/callback`;
 const SCOPE = 'https%3A//www.googleapis.com/auth/userinfo.profile';
 
 const GoogleButton = ({ children, ...attributes }) => {
-  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`;
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${SCOPE}`;
 
   // 클릭 시 googleAuthUrl로 get 요청
   return (
