@@ -48,5 +48,6 @@ jobs:
           key: ${{ env.EC2_KEY }}
           script: |
             cd /home/ubuntu/jingyu-blog
+	    git pull origin main
             docker compose pull
             docker compose up -d
