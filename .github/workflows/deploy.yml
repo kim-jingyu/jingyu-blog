@@ -23,6 +23,7 @@ jobs:
           mkdir $PROJECT_ROOT
           cp -r backend frontend docker-compose.yml $PROJECT_ROOT/
           echo "${{ secrets.ENV_BACKEND }}" > $PROJECT_ROOT/backend/.env
+          echo "${{ secrets.ENV_FRONTEND }}" > $PROJECT_ROOT/frontend/.env
           zip -r $S3_KEY $PROJECT_ROOT
 
       - name: Configure AWS Credentials
