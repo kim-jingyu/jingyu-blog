@@ -1,8 +1,5 @@
 FROM node:22-alpine as builder
 WORKDIR /app
-
-COPY .env .env
-
 COPY . .
 RUN npm install && npm run build
 

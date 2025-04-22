@@ -12,9 +12,7 @@ services:
       - jingyu
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: kimjingyu/frontend:latest
     container_name: frontend
     restart: always
     ports:
