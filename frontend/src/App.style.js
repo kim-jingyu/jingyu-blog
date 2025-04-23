@@ -11,13 +11,37 @@ export const darkTheme = {
 };
 
 export const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.color};
-  }
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: ${({ theme }) => theme.backgroundColor};
+        color: ${({ theme }) => theme.color};
+
+        @media (max-width: 768px) {
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 12px;
+        }
+    }
+
+    #root {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        @media (max-width: 768px) {
+            padding: 0 16px;
+        }
+
+        @media (max-width: 480px) {
+            padding: 0 8px;
+        }
+    }
 `;
 
 export const OutletWrapper = styled.div`

@@ -4,6 +4,8 @@ export const LoginWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 90vh;
+    padding: 20px;
 `
 
 export const LoginContainer = styled.div`

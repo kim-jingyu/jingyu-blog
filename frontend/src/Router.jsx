@@ -38,9 +38,12 @@ const router = createBrowserRouter([
                 path: PATH.KakaoCallBack,
                 element: <PAGE.KakaoLoginCallback />,
                 errorElement: <PAGE.NotFound />
+            },
+            {
+                path: '*',
+                element: <PAGE.NotFound />
             }
-        ],
-        errorElement: <PAGE.NotFound />
+        ]
     }
 ])
 
