@@ -58,6 +58,8 @@ jobs:
           key: ${{ env.EC2_KEY }}
           script: |
             cd /home/ubuntu/jingyu-blog
+            git pull origin main
+            docker compose down
             docker compose pull
             echo "${{ env.ENV_BACKEND }}" > ./backend/.env
             docker compose up -d
