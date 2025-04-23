@@ -49,6 +49,9 @@ jobs:
           script: |
             cd /home/ubuntu/jingyu-blog
             git pull origin main
+            cd frontend
+            npm install && npm run build
+            cd ..
             echo "${{ secrets.ENV_BACKEND }}" > ./backend/.env
             docker compose pull
             docker compose up -d
