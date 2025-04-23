@@ -16,6 +16,8 @@ jobs:
       EC2_HOST: ${{ secrets.EC2_HOST }}
       EC2_USER: ubuntu
       EC2_KEY: ${{ secrets.EC2_KEY }}
+      ENV_BACKEND: ${{ secrets.ENV_BACKEND }}
+      ENV_FRONTEND: ${{ secrets.ENV_FRONTEND }}
 
     steps:
       - name: Checkout code
@@ -37,10 +39,18 @@ jobs:
 
       - name: Build and push frontend image
         run: |
-          docker build -t $DOCKERHUB_USERNAME/frontend ./frontend
+          echo "${{ secrets.ENV_FRONTEND }}" > .env.frontend
+          source .env.frontend
+          
+          docker build \
+            --build-arg VITE_API_URL=${VITE_API_URL} \
+            --build-arg VITE_APP_GOOGLE_CLIENT_ID=${VITE_APP_GOOGLE_CLIENT_ID} \
+            --build-arg VITE_APP_KAKAO_CLIENT_ID=${VITE_APP_KAKAO_CLIENT_ID} \
+            -t $DOCKERHUB_USERNAME/frontend ./frontend      
+      
           docker push $DOCKERHUB_USERNAME/frontend
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2 - docker-compose with ENV
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ env.EC2_HOST }}
@@ -48,10 +58,6 @@ jobs:
           key: ${{ env.EC2_KEY }}
           script: |
             cd /home/ubuntu/jingyu-blog
-            git pull origin main
-            cd frontend
-            npm install && npm run build
-            cd ..
-            echo "${{ secrets.ENV_BACKEND }}" > ./backend/.env
             docker compose pull
+            echo "${{ secrets.ENV_BACKEND }}" > ./backend/.env
             docker compose up -d
