@@ -1,14 +1,28 @@
 import MDEditor from '@uiw/react-md-editor';
 import styled from 'styled-components';
 
+export const PostDetailContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 50px; 
+    width: 100%;
+    padding: 0 20px;
+
+    @media (max-width: 480px) {
+        margin-top: 20px; /* 더 작은 화면에서는 여백 최소화 */
+        padding: 0 10px; /* 좌우 패딩 추가 */
+    }
+`
+
 export const PostContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 20px;
     margin: 0 auto; /* 중앙 정렬을 유지 */
-    width: 2000px; /* 가로 크기 고정 */
-    max-width: 90%; /* 화면 크기에 따라 최대 너비 조정 */
+    width: 100%; /* 기본적으로 화면 크기에 맞춤 */
+    max-width: 2000px; /* 최대 폭 제한 */
     border-radius: 8px; /* 모서리 둥글게 */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* 박스 그림자 추가 */
 
@@ -26,7 +40,6 @@ export const NavContainer = styled.nav`
     width: 10%;
     max-width: 300px;
     min-width: 200px;
-    margin-left: 50px;
     padding: 10px;
     height: max-content;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* 박스 그림자 추가 */

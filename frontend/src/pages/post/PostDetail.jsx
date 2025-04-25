@@ -12,7 +12,7 @@ import {
     CommentList,
     CommentItem,
     AddCommentButton,
-    NavContainer
+    NavContainer, PostDetailContainer
 } from './PostDetail.style';
 import { useRecoilValue } from 'recoil';
 import { themeState } from '../../recoils/Theme';
@@ -88,7 +88,7 @@ const PostDetail = () => {
     const textColor = theme === 'dark' ? '#fff' : '#000';
 
     return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: '50px' }}>
+        <PostDetailContainer>
             <PostContainer style={{ flex: 1 }}>
                 <div>
                     <Title>{post.title}</Title>
@@ -143,7 +143,7 @@ const PostDetail = () => {
                     onSubmit={handleAddComment}
                 />
             )}
-        </div>
+        </PostDetailContainer>
     );
 };
 
