@@ -31,23 +31,24 @@ export const GlobalStyle = createGlobalStyle`
         display: flex;
         flex-direction: column;
         width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
+        max-width: 100%; /* max-width 제한을 제거 */
+        margin: 0; /* 중앙 정렬을 위한 여백 제거 */
+        padding: 0; /* 모바일에서 채우기 위한 여백 제거 */
 
         @media (max-width: 768px) {
-            padding: 0 16px;
+            padding: 0; /* 모바일 기기에서 여백 제거 */
         }
 
         @media (max-width: 480px) {
-            padding: 0 8px;
+            padding: 0; /* 모바일 기기에서 여백 제거 */
         }
     }
 `;
 
 export const OutletWrapper = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+    align-items: center; /* 세로 방향 중앙 정렬 */
+    justify-content: center; /* 가로 방향 중앙 정렬 */
 
   background-color: ${({ theme }) => theme.backgroundColor};
   color: ${({ theme }) => theme.color};

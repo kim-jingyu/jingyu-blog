@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, ButtonGroup, HeaderContainer, Logo } from "./Header.style";
+import { Button, ButtonGroup, HeaderContainer, LogoWrapper, Logo, SearchBarWrapper } from "./Header.style";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { privateApi } from "../../../apis/axiosInstance";
@@ -15,7 +15,7 @@ function Header() {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
+        const token = localStorage.getItem("accessToken");
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
@@ -28,59 +28,73 @@ function Header() {
     }, []);
 
     const changeTheme = () => {
-        setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-    }
+        setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    };
 
     const clickLoginButton = () => {
-        navigate('/login');
-    }
+        navigate("/login");
+    };
 
     const clickWriteButton = () => {
-        navigate('/post/write');
-    }
+        navigate("/post/write");
+    };
 
     const clickLogoutButton = () => {
-        const apiEndpoint = role === 'ADMIN' ? '/admin/logout' : '/logout';
-        privateApi.post(apiEndpoint)
+        const apiEndpoint = role === "ADMIN" ? "/admin/logout" : "/logout";
+        privateApi
+            .post(apiEndpoint)
             .then(() => {
-                localStorage.removeItem('accessToken');
+                localStorage.removeItem("accessToken");
                 setIsLoggedIn(false);
                 setRole(null);
-                navigate('/');
+                navigate("/");
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error("로그아웃 에러: ", error);
             });
-    }
+    };
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
     };
 
     const themeStyle = {
-        backgroundColor: theme === 'dark' ? '#292929' : '#fff',
-        textColor: theme === 'dark' ? '#fff' : '#000',
+        backgroundColor: theme === "dark" ? "#292929" : "#fff",
+        textColor: theme === "dark" ? "#fff" : "#000",
     };
 
     return (
         <HeaderContainer themeStyle={themeStyle}>
-            <Logo href="/" themeStyle={themeStyle}>진규의 블로그😜</Logo>
-            <ButtonGroup themeStyle={themeStyle}>
+            <LogoWrapper>
+                <Logo href="/" themeStyle={themeStyle}>
+                    진규의 블로그😜
+                </Logo>
+                <ButtonGroup themeStyle={themeStyle}>
+                    <Button onClick={changeTheme} themeStyle={themeStyle}>
+                        Theme
+                    </Button>
+                    {role === "ADMIN" ? (
+                        <Button onClick={clickWriteButton} themeStyle={themeStyle}>
+                            Write
+                        </Button>
+                    ) : null}
+                    {isLoggedIn ? (
+                        <Button onClick={clickLogoutButton} themeStyle={themeStyle}>
+                            Logout
+                        </Button>
+                    ) : (
+                        <Button onClick={clickLoginButton} themeStyle={themeStyle}>
+                            Login
+                        </Button>
+                    )}
+                </ButtonGroup>
+            </LogoWrapper>
+
+            <SearchBarWrapper>
                 <SearchBar search={search} onChange={handleSearchChange} />
-                <Button onClick={changeTheme} themeStyle={themeStyle}>Theme</Button>
-                {role === 'ADMIN' ? <Button onClick={clickWriteButton} themeStyle={themeStyle}>Write</Button> : null}
-                {isLoggedIn ? (
-                    <Button onClick={clickLogoutButton} themeStyle={themeStyle}>
-                        Logout
-                    </Button>
-                ) : (
-                    <Button onClick={clickLoginButton} themeStyle={themeStyle}>
-                        Login
-                    </Button>
-                )}
-            </ButtonGroup>
+            </SearchBarWrapper>
         </HeaderContainer>
-    )
+    );
 }
 
 export default Header;

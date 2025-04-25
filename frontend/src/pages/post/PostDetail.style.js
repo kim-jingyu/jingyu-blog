@@ -6,11 +6,47 @@ export const PostContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-    margin-left: 20vh;
-    width: 1000px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* 중앙 정렬을 유지 */
+    width: 2000px; /* 가로 크기 고정 */
+    max-width: 90%; /* 화면 크기에 따라 최대 너비 조정 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* 박스 그림자 추가 */
+
+    @media (max-width: 768px) {
+        width: 100%; /* 모바일 화면에서는 가로 폭을 화면에 꽉 채움 */
+        min-width: 350px;
+        max-width: 100%; /* 100% 제한 */
+        padding: 10px; /* 적절한 내부 패딩 */
+    }
 `;
+
+export const NavContainer = styled.nav`
+    position: sticky;
+    top: 50px;
+    width: 10%;
+    max-width: 300px;
+    min-width: 200px;
+    margin-left: 50px;
+    padding: 10px;
+    height: max-content;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* 박스 그림자 추가 */
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        /* 모바일 화면에서 NavContainer 숨김 */
+        display: none;
+    }
+`;
+
 
 export const Title = styled.h1`
     font-size: 24px;

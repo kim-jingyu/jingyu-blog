@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { privateApi } from '../../apis/axiosInstance';
-import { PostContainer, Title, DateInfo, HashtagList, HashtagItem, StyledMarkdown, CommentSection, CommentList, CommentItem, AddCommentButton } from './PostDetail.style';
+import {
+    PostContainer,
+    Title,
+    DateInfo,
+    HashtagList,
+    HashtagItem,
+    StyledMarkdown,
+    CommentSection,
+    CommentList,
+    CommentItem,
+    AddCommentButton,
+    NavContainer
+} from './PostDetail.style';
 import { useRecoilValue } from 'recoil';
 import { themeState } from '../../recoils/Theme';
 import CommentModal from '../../components/post/CommentModal';
@@ -76,7 +88,7 @@ const PostDetail = () => {
     const textColor = theme === 'dark' ? '#fff' : '#000';
 
     return (
-        <div style={{ display: 'flex', position: 'relative' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: '50px' }}>
             <PostContainer style={{ flex: 1 }}>
                 <div>
                     <Title>{post.title}</Title>
@@ -100,7 +112,7 @@ const PostDetail = () => {
                             <CommentItem key={comment.commentId}>
                                 <p>
                                     <span style={{ fontSize: '15px' }}>{comment.memberName}</span>
-                                    <span style={{ marginLeft: '10px', color: '#888', fontSize: '12px' }}> 
+                                    <span style={{ marginLeft: '10px', color: '#888', fontSize: '12px' }}>
                                         . {new Date(comment.date).toLocaleString('ko-KR')}
                                     </span>
                                 </p>
@@ -111,32 +123,20 @@ const PostDetail = () => {
                 </CommentSection>
             </PostContainer>
 
-            <nav style={{
-                position: 'sticky',
-                top: '50px',
-                right: '20px',
-                width: '250px',
-                maxHeight: '20vh',
-                overflowY: 'auto',
-                padding: '10px',
-                marginLeft: '10px'
-            }}>
-                <ul style={{ listStyle: 'none', paddingLeft: '0px' }}>
+            <NavContainer>
+                <ul>
                     {headings.map((heading, index) => (
                         <li
                             key={index}
-                            style={{
-                                marginLeft: `${(heading.level - 1) * 10}px`,
-                                cursor: 'pointer',
-                                marginBottom: '8px',
-                            }}
+                            style={{ marginLeft: `${(heading.level - 1) * 10}px` }}
                             onClick={() => handleClick(heading.id)}
                         >
                             {heading.text}
                         </li>
                     ))}
                 </ul>
-            </nav>
+            </NavContainer>
+
             {isModalOpen && (
                 <CommentModal
                     onClose={() => setIsModalOpen(false)}

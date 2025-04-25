@@ -6,6 +6,18 @@ export const LoginWrapper = styled.div`
     align-items: center;
     height: 90vh;
     padding: 20px;
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: #000;
+
+    @media (max-width: 768px) {
+        max-width: 90%;
+        padding: 10px; /* 모바일 화면에서 여백 조정 */
+    }
+
+    @media (max-width: 480px) {
+        max-width: 90%;
+        padding: 5px; /* 작은 화면에 맞춰 추가적인 여백 축소 */
+    }
 `
 
 export const LoginContainer = styled.div`
@@ -16,13 +28,14 @@ export const LoginContainer = styled.div`
     border-radius: 10px;
     text-align: center;
     position: relative;
-` 
+    background-color: #fff;
+`
 
 export const Title = styled.h1`
     font-size: 24px;
     margin-bottom: 20px;
 `
- 
+
 export const LoginForm = styled.form`
     display: flex;
     flex-direction: column;
