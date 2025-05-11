@@ -84,16 +84,13 @@ const PostDetail = () => {
         }
     };
 
-    const backgroundColor = theme === 'dark' ? '#292929' : '#fff';
-    const textColor = theme === 'dark' ? '#fff' : '#000';
-
     return (
         <PostDetailContainer>
             <PostContainer style={{ flex: 1 }}>
                 <div>
                     <Title>{post.title}</Title>
                     <DateInfo>{new Date(post.date).toLocaleString('ko-KR')}</DateInfo>
-                    <StyledMarkdown source={post.content} backgroundColor={backgroundColor} textColor={textColor} />
+                    <StyledMarkdown source={post.content} />
                 </div>
                 <HashtagList>
                     {post.hashtags.map((hashtag, index) => (

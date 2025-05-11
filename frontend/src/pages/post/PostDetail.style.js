@@ -67,9 +67,6 @@ export const Title = styled.h1`
 `;
 
 export const StyledMarkdown = styled(MDEditor.Markdown)`
-    background-color: ${({ backgroundColor }) => backgroundColor};
-    color: ${({ textColor }) => textColor};
-    padding: 20px;
 `;
 
 export const DateInfo = styled.div`
