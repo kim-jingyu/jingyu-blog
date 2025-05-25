@@ -17,6 +17,7 @@ import {
 import { useRecoilValue } from 'recoil';
 import { themeState } from '../../recoils/Theme';
 import CommentModal from '../../components/post/CommentModal';
+import {jwtDecode} from "jwt-decode";
 
 const extractHeadings = (markdown) => {
     const headings = [];
@@ -42,8 +43,25 @@ const PostDetail = () => {
     const [comments, setComments] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const theme = useRecoilValue(themeState);
+    const [userRole, setUserRole] = useState(null);
 
     useEffect(() => {
+        const checkUserRole = () => {
+            const token = localStorage.getItem('accessToken');
+            if (token) {
+                try {
+                    const decodedToken = jwtDecode(token);
+                    console.log('권한: ',decodedToken.authority);
+                    setUserRole(decodedToken.authority);
+                } catch (error) {
+                    console.error("Invalid token", error);
+                    setUserRole(null);
+                }
+            }
+        }
+
+        checkUserRole()
+
         const fetchPostDetail = async () => {
             try {
                 const response = await privateApi.get(`/post/${postId}`);
@@ -100,9 +118,11 @@ const PostDetail = () => {
                 <CommentSection>
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <h3 style={{ margin: 0 }}>댓글</h3>
-                        <AddCommentButton onClick={() => setIsModalOpen(true)} style={{ marginLeft: '10px' }}>
-                            ✏️
-                        </AddCommentButton>
+                        {userRole === 'MEMBER' && (
+                            <AddCommentButton onClick={() => setIsModalOpen(true)} style={{ marginLeft: '10px' }}>
+                                ✏️
+                            </AddCommentButton>
+                        )}
                     </div>
                     <CommentList>
                         {comments.map((comment) => (
