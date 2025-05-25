@@ -63,7 +63,6 @@ export const NavContainer = styled.nav`
 
 export const Title = styled.h1`
     font-size: 24px;
-    margin-bottom: 10px;
 `;
 
 export const StyledMarkdown = styled(MDEditor.Markdown)`
@@ -118,6 +117,16 @@ export const CommentItem = styled.li`
 `;
 
 export const AddCommentButton = styled.button`
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+`;
+
+export const AdminEditButton = styled.button`
     display: inline-block;
     padding: 10px 20px;
     border: none;

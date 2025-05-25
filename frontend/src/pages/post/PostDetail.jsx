@@ -12,7 +12,7 @@ import {
     CommentList,
     CommentItem,
     AddCommentButton,
-    NavContainer, PostDetailContainer
+    NavContainer, PostDetailContainer, AdminEditButton
 } from './PostDetail.style';
 import { useRecoilValue } from 'recoil';
 import { themeState } from '../../recoils/Theme';
@@ -51,8 +51,8 @@ const PostDetail = () => {
             if (token) {
                 try {
                     const decodedToken = jwtDecode(token);
-                    console.log('권한: ',decodedToken.authority);
-                    setUserRole(decodedToken.authority);
+                    console.log('권한: ',decodedToken.role);
+                    setUserRole(decodedToken.role);
                 } catch (error) {
                     console.error("Invalid token", error);
                     setUserRole(null);
@@ -102,11 +102,27 @@ const PostDetail = () => {
         }
     };
 
+    const handleEditPost = async () => {
+        try {
+            alert('포스트가 수정되었습니다!');
+        } catch (error) {
+            console.error('포스트 수정 실패:', error);
+            alert('포스트 수정에 실패했습니다.');
+        }
+    };
+
     return (
         <PostDetailContainer>
             <PostContainer style={{ flex: 1 }}>
                 <div>
-                    <Title>{post.title}</Title>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <Title>{post.title}</Title>
+                        {userRole === 'ADMIN' && (
+                            <AdminEditButton onClick={handleEditPost} style={{ marginLeft: '10px' }}>
+                                ️ ✏️
+                            </AdminEditButton>
+                        )}
+                    </div>
                     <DateInfo>{new Date(post.date).toLocaleString('ko-KR')}</DateInfo>
                     <StyledMarkdown source={post.content} />
                 </div>
@@ -118,7 +134,7 @@ const PostDetail = () => {
                 <CommentSection>
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <h3 style={{ margin: 0 }}>댓글</h3>
-                        {userRole === 'MEMBER' && (
+                        {(userRole === 'MEMBER' || userRole === 'ADMIN') && (
                             <AddCommentButton onClick={() => setIsModalOpen(true)} style={{ marginLeft: '10px' }}>
                                 ✏️
                             </AddCommentButton>
