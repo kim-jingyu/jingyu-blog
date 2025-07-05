@@ -66,6 +66,36 @@ export const Title = styled.h1`
 `;
 
 export const StyledMarkdown = styled(MDEditor.Markdown)`
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1em 0;
+        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#232323' : '#fff'};
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    th, td {
+        border: 1px solid ${({ theme }) => theme.backgroundColor === '#292929' ? '#555' : '#ddd'};
+        padding: 0.6em 1em;
+        text-align: left;
+        color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#fafafa' : '#222'};
+        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#292929' : '#fff'};
+        font-size: 1em;
+        transition: background 0.2s;
+    }
+    th {
+        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#3b3b3b' : '#f7f7f7'};
+        font-weight: bold;
+        color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#fff' : '#111'};
+        letter-spacing: .03em;
+    }
+    tr {
+        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#232323' : '#fff'};
+    }
+    tr:nth-child(even) {
+        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#24272e' : '#fafbfc'};
+    }
 `;
 
 export const DateInfo = styled.div`
