@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import { privateApi } from '../../apis/axiosInstance';
 import {
     PostContainer,
@@ -44,6 +44,7 @@ const PostDetail = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const theme = useRecoilValue(themeState);
     const [userRole, setUserRole] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkUserRole = () => {
@@ -104,7 +105,7 @@ const PostDetail = () => {
 
     const handleEditPost = async () => {
         try {
-            alert('포스트가 수정되었습니다!');
+            navigate(`/post/${postId}/edit`);
         } catch (error) {
             console.error('포스트 수정 실패:', error);
             alert('포스트 수정에 실패했습니다.');

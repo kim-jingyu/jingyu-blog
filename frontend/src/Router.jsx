@@ -40,6 +40,11 @@ const router = createBrowserRouter([
                 errorElement: <PAGE.NotFound />
             },
             {
+                path: PATH.PostEdit,
+                element: <PAGE.PostEdit />,
+                errorElement: <PAGE.NotFound />
+            },
+            {
                 path: '*',
                 element: <PAGE.NotFound />
             }

@@ -8,7 +8,8 @@ export const PostContainer = styled.div`
     justify-content: center;
     align-items: center;
     height: 1200px;
-    margin: 0 auto;
+    width: 1500px;
+    margin: 50px 0 auto;
     padding: 20px;
     background-color: #fafafa;
     border-radius: 8px;
