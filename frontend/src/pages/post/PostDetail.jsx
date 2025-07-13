@@ -160,6 +160,7 @@ const PostDetail = () => {
                                                     : `/post/${postId}/comments/${comment.commentId}/by-member`;
                                                 await privateApi.delete(url);
                                                 setComments((prev) => prev.filter((c) => c.commentId !== comment.commentId));
+                                                alert('댓글이 삭제되었습니다.')
                                             } catch (err) {
                                                 console.error("댓글 삭제 실패", err);
                                                 alert('댓글 삭제에 실패했습니다.');
