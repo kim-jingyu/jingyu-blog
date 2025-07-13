@@ -151,6 +151,32 @@ const PostDetail = () => {
                                     </span>
                                 </p>
                                 <p style={{ marginTop: '10px' }}>{comment.content}</p>
+                                {(userRole === 'ADMIN' || userRole === 'MEMBER') && (
+                                    <button
+                                        onClick={async () => {
+                                            try {
+                                                const url = userRole === 'ADMIN'
+                                                    ? `/post/${postId}/comments/${comment.commentId}/by-admin`
+                                                    : `/post/${postId}/comments/${comment.commentId}/by-member`;
+                                                await privateApi.delete(url);
+                                                setComments((prev) => prev.filter((c) => c.commentId !== comment.commentId));
+                                            } catch (err) {
+                                                console.error("댓글 삭제 실패", err);
+                                                alert('댓글 삭제에 실패했습니다.');
+                                            }
+                                        }}
+                                        style={{
+                                            marginTop: '5px',
+                                            fontSize: '12px',
+                                            color: 'red',
+                                            background: 'none',
+                                            border: 'none',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        ❌ 댓글 삭제
+                                    </button>
+                                )}
                             </CommentItem>
                         ))}
                     </CommentList>
