@@ -9,6 +9,7 @@ import blog.jingyu.member.repository.MemberRepository;
 import blog.jingyu.post.domain.Comments;
 import blog.jingyu.post.domain.Post;
 import blog.jingyu.post.dto.*;
+import blog.jingyu.post.exception.CommentNotFoundException;
 import blog.jingyu.post.exception.PostNotFoundException;
 import blog.jingyu.post.repository.CommentsRepository;
 import blog.jingyu.post.repository.PostRepository;
@@ -122,5 +123,28 @@ public class PostService {
         post.getComments().add(savedComment);
         postRepository.save(post);
         return savedComment.getCommentId();
+    }
+
+    @Transactional
+    public void deleteCommentByAdmin(String adminId, String postId, String commentId) {
+        Post foundPost = postRepository.findByPostIdAndAdmin_AdminId(postId, adminId).orElseThrow(PostNotFoundException::new);
+        if (!foundPost.getComments().removeIf((comments -> comments.getCommentId().equals(commentId)))) {
+            return;
+        }
+        commentsRepository.deleteById(commentId);
+        postRepository.save(foundPost);
+    }
+
+    @Transactional
+    public void deleteCommentByMember(String memberId, String postId, String commentId) {
+        commentsRepository.findByCommentIdAndMember_MemberId(commentId, memberId).orElseThrow(CommentNotFoundException::new);
+
+        Post foundPost = postRepository.getById(postId);
+        if (!foundPost.getComments().removeIf(comments -> comments.getCommentId().equals(commentId))) {
+            return;
+        }
+
+        commentsRepository.deleteById(commentId);
+        postRepository.save(foundPost);
     }
 }

@@ -84,4 +84,18 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postService.makeComment(accessor.getMemberId(), commentRequest, id));
     }
+
+    @AdminOnly
+    @DeleteMapping(value = "/{postId}/comments/{commentId}/by-admin")
+    public ResponseEntity<Void> deleteCommentByAdmin(@MemberCheck Accessor accessor, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId) {
+        postService.deleteCommentByAdmin(accessor.getMemberId(), postId, commentId);
+        return ResponseEntity.ok().build();
+    }
+
+    @MemberOnly
+    @DeleteMapping(value = "/{postId}/comments/{commentId}/by-member")
+    public ResponseEntity<Void> deleteCommentByMember(@MemberCheck Accessor accessor, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId) {
+        postService.deleteCommentByMember(accessor.getMemberId(), postId, commentId);
+        return ResponseEntity.ok().build();
+    }
 }
