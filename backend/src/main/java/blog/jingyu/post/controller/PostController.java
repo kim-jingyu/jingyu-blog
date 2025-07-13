@@ -65,6 +65,7 @@ public class PostController {
         postService.abortMultipartUpload(request);
     }
 
+    @AdminOnly
     @PatchMapping(value = "/{id}")
     public ResponseEntity<PostResponse> editPost(@PathVariable("id") String id, @RequestBody PostEditRequest postEditRequest) {
         return ResponseEntity.ok()
