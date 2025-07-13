@@ -10,6 +10,7 @@ import blog.jingyu.post.service.PostService;
 import com.amazonaws.services.s3.model.CompleteMultipartUploadResult;
 import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URL;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/post")
@@ -67,7 +69,8 @@ public class PostController {
 
     @AdminOnly
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<PostResponse> editPost(@PathVariable("id") String id, @RequestBody PostEditRequest postEditRequest) {
+    public ResponseEntity<PostResponse> editPost(@AdminCheck Accessor accessor, @PathVariable("id") String id, @RequestBody PostEditRequest postEditRequest) {
+        log.info("accessor.getMemberId = {}, accessor.getAuthority = {}", accessor.getMemberId(), accessor.getAuthority());
         return ResponseEntity.ok()
                 .body(postService.editPost(id, postEditRequest));
     }

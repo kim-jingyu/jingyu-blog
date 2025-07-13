@@ -6,10 +6,7 @@ import blog.jingyu.post.dto.HashtagEditRequest;
 import blog.jingyu.post.dto.HashtagRequest;
 import blog.jingyu.post.dto.PostEditRequest;
 import blog.jingyu.post.dto.PostRequest;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -33,6 +30,7 @@ public class Post extends BaseEntity {
 
     private String contents;
 
+    @Setter
     @Builder.Default
     private List<Hashtag> hashtags = new ArrayList<>();
 
@@ -45,9 +43,6 @@ public class Post extends BaseEntity {
         return Post.builder()
                 .title(postRequest.title())
                 .contents(postRequest.contents())
-                .hashtags(postRequest.hashtags().stream()
-                        .map(Hashtag::createHashtag)
-                        .toList())
                 .admin(admin)
                 .build();
     }
@@ -61,16 +56,15 @@ public class Post extends BaseEntity {
         }
         if (postEditRequest.hashtags() != null) {
             Map<String, Hashtag> hashtagMap = hashtags.stream()
-                    .collect(Collectors.toMap(Hashtag::getHashtagId, hashtag -> hashtag));
+                    .collect(Collectors.toMap(Hashtag::getContent, hashtag -> hashtag));
             for (HashtagEditRequest requestEditHashtag : postEditRequest.hashtags()) {
-                Hashtag postHashtag = hashtagMap.get(requestEditHashtag.hashtagId());
-                if (postHashtag == null) {
-                    postHashtag = Hashtag.createHashtag(new HashtagRequest(requestEditHashtag.content()));
-                    postHashtag.setPost(this);
-                    this.hashtags.add(postHashtag);
+                Hashtag postHashtag = hashtagMap.get(requestEditHashtag.content());
+                if (postHashtag != null) {
                     continue;
                 }
-                postHashtag.editContent(requestEditHashtag.content());
+                postHashtag = Hashtag.createHashtag(new HashtagRequest(requestEditHashtag.content()));
+                postHashtag.setPost(this);
+                this.hashtags.add(postHashtag);
             }
         }
         return this;

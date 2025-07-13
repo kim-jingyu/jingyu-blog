@@ -7,11 +7,13 @@ import blog.jingyu.member.domain.Member;
 import blog.jingyu.member.exception.MemberNotFoundException;
 import blog.jingyu.member.repository.MemberRepository;
 import blog.jingyu.post.domain.Comments;
+import blog.jingyu.post.domain.Hashtag;
 import blog.jingyu.post.domain.Post;
 import blog.jingyu.post.dto.*;
 import blog.jingyu.post.exception.CommentNotFoundException;
 import blog.jingyu.post.exception.PostNotFoundException;
 import blog.jingyu.post.repository.CommentsRepository;
+import blog.jingyu.post.repository.HashtagRepository;
 import blog.jingyu.post.repository.PostRepository;
 import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,7 @@ public class PostService {
     private final CommentsRepository commentsRepository;
     private final AdminRepository adminRepository;
     private final MemberRepository memberRepository;
+    private final HashtagRepository hashtagRepository;
     private final S3Config s3Config;
 
     public Page<PostResponse> getPosts(int page) {
@@ -52,12 +55,26 @@ public class PostService {
     @Transactional
     public String makePost(String adminId, PostRequest postRequest) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(MemberNotFoundException::new);
-        return postRepository.save(Post.createPost(admin, postRequest)).getPostId();
+        Post post = postRepository.save(Post.createPost(admin, postRequest));
+        post.setHashtags(hashtagRepository.saveAll(postRequest.hashtags().stream()
+                .map(hashtagRequest -> {
+                    Hashtag hashtag = Hashtag.createHashtag(hashtagRequest);
+                    hashtag.setPost(post);
+                    return hashtag;
+                })
+                .toList()));
+        postRepository.save(post);
+        return post.getPostId();
     }
 
     @Transactional
     public PostResponse editPost(String postId, PostEditRequest postEditRequest) {
-        return new PostResponse(postRepository.getById(postId).editPost(postEditRequest));
+        Post editedPost = postRepository.getById(postId).editPost(postEditRequest);
+
+        List<Hashtag> hashtags = editedPost.getHashtags();
+        hashtagRepository.saveAll(hashtags);
+
+        return new PostResponse(postRepository.save(editedPost));
     }
 
     public InitiateMultipartUploadResult initiateMultipartUpload(PreSignedUploadInitiateRequest request) {
