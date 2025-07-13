@@ -116,13 +116,13 @@ public class PostService {
     }
 
     @Transactional
-    public String makeComment(String memberId, CommentRequest commentRequest, String postId) {
+    public CommentsResponse makeComment(String memberId, CommentRequest commentRequest, String postId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         Comments savedComment = commentsRepository.save(Comments.createComment(member, commentRequest, post));
         post.getComments().add(savedComment);
         postRepository.save(post);
-        return savedComment.getCommentId();
+        return new CommentsResponse(savedComment);
     }
 
     @Transactional

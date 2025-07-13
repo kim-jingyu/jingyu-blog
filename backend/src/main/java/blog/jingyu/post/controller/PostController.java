@@ -80,14 +80,14 @@ public class PostController {
 
     @MemberOnly
     @PostMapping(value = "/{id}/comments")
-    public ResponseEntity<String> makeComment(@MemberCheck Accessor accessor, @PathVariable("id") String id, @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<CommentsResponse> makeComment(@MemberCheck Accessor accessor, @PathVariable("id") String id, @RequestBody CommentRequest commentRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postService.makeComment(accessor.getMemberId(), commentRequest, id));
     }
 
     @AdminOnly
     @DeleteMapping(value = "/{postId}/comments/{commentId}/by-admin")
-    public ResponseEntity<Void> deleteCommentByAdmin(@MemberCheck Accessor accessor, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId) {
+    public ResponseEntity<Void> deleteCommentByAdmin(@AdminCheck Accessor accessor, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId) {
         postService.deleteCommentByAdmin(accessor.getMemberId(), postId, commentId);
         return ResponseEntity.ok().build();
     }

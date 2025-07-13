@@ -2,6 +2,7 @@ package blog.jingyu.post.dto;
 
 import blog.jingyu.post.domain.Post;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public record PostDetailResponse(String postId, String title, String content, Zo
         this(post.getPostId(),
                 post.getTitle(),
                 post.getContents(),
-                post.getCreatedAt(),
+                post.getCreatedAt().atZone(ZoneId.of("Asia/Seoul")),
                 post.getHashtags().stream()
                         .map(HashtagResponse::new)
                         .toList(),
