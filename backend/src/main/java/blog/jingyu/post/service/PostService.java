@@ -40,6 +40,10 @@ public class PostService {
     private final HashtagRepository hashtagRepository;
     private final S3Config s3Config;
 
+    public List<Post> getPosts() {
+        return postRepository.findAll();
+    }
+
     public Page<PostResponse> getPosts(int page) {
         Page<Post> allPost = postRepository.findAll(PageRequest.of(page, 5, Sort.Direction.ASC, "postId"));
         return allPost.map(PostResponse::new);
