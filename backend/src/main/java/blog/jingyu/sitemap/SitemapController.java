@@ -24,7 +24,7 @@ public class SitemapController {
         List<Post> posts = postService.getPosts();
 
         ZoneId seoulZone = ZoneId.of("Asia/Seoul");
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mmXXX");
 
         StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
