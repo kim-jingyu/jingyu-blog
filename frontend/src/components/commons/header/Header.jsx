@@ -39,19 +39,18 @@ function Header() {
         navigate("/post/write");
     };
 
-    const clickLogoutButton = () => {
+    const clickLogoutButton = async () => {
         const apiEndpoint = role === "ADMIN" ? "/admin/logout" : "/logout";
-        privateApi
-            .post(apiEndpoint)
-            .then(() => {
-                localStorage.removeItem("accessToken");
-                setIsLoggedIn(false);
-                setRole(null);
-                navigate("/");
-            })
-            .catch((error) => {
-                console.error("로그아웃 에러: ", error);
-            });
+        try {
+            await privateApi.post(apiEndpoint)
+        } catch (error) {
+            console.error("로그아웃 에러: ", error);
+        } finally {
+            localStorage.removeItem("accessToken");
+            setIsLoggedIn(false);
+            setRole(null);
+            navigate("/");
+        }
     };
 
     const handleSearchChange = (e) => {
