@@ -23,16 +23,17 @@ const extractHeadings = (markdown) => {
     const headings = [];
     const regex = /^(#{1,6})\s*(.*)/gm;
     let match;
-  
+
     while ((match = regex.exec(markdown)) !== null) {
-      const level = match[1].length;
-      const text = match[2];
-      const id = text.toLowerCase().replace(/\s+/g, '-');
-      headings.push({ text, level, id });
+        const level = match[1].length; // 헤딩 레벨 (e.g., # -> 1, ## -> 2)
+        const text = match[2]; // 헤딩 텍스트
+        let baseId = `${level}-${text.toLowerCase}`;
+
+        headings.push({ text, level, id: baseId }); // 최종 고유 ID 생성
     }
-  
+
     return headings;
-  };
+};
 
 const PostDetail = () => {
     const { postId } = useParams();

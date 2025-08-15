@@ -5,15 +5,24 @@ export const PostDetailContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 50px; 
+    margin-top: 50px;
     width: 100%;
     padding: 0 20px;
+    gap: 24px; /* 사이 간격 추가 */
+
+    @media (max-width: 768px) {
+        flex-direction: column; /* 모바일에서 세로 배치 */
+        gap: 12px;
+        padding: 0 12px;
+        width: 100%;
+        overflow-x: hidden; /* 가로 스크롤 방지 */
+    }
 
     @media (max-width: 480px) {
         margin-top: 20px; /* 더 작은 화면에서는 여백 최소화 */
         padding: 0 10px; /* 좌우 패딩 추가 */
     }
-`
+`;
 
 export const PostContainer = styled.div`
     display: flex;
@@ -28,30 +37,98 @@ export const PostContainer = styled.div`
 
     @media (max-width: 768px) {
         width: 100%; /* 모바일 화면에서는 가로 폭을 화면에 꽉 채움 */
-        min-width: 350px;
         max-width: 100%; /* 100% 제한 */
-        padding: 10px; /* 적절한 내부 패딩 */
+        min-width: 0; /* 콘텐츠로 인한 강제 확장 방지 */
+        margin: 0; /* 좌우 여백 제거 */
+        padding: 12px; /* 적절한 내부 패딩 */
+        box-sizing: border-box; /* 패딩 포함 폭 계산 */
     }
 `;
 
+
 export const NavContainer = styled.nav`
     position: sticky;
-    top: 50px;
-    width: 10%;
+    top: 10px;
+    width: 260px;
     max-width: 300px;
-    min-width: 200px;
-    padding: 10px;
+    min-width: 220px;
+    padding: 16px 12px;
     height: max-content;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* 박스 그림자 추가 */
+    border-radius: 12px;
+    background: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#1e1e1e' : '#ffffff'};
+    border: 1px solid ${({ theme }) => theme?.backgroundColor === '#292929' ? '#2c2c2c' : 'rgba(0,0,0,0.08)'};
+    box-shadow: ${({ theme }) => theme?.backgroundColor === '#292929'
+    ? '0 6px 16px rgba(0,0,0,0.35)'
+    : '0 8px 24px rgba(0,0,0,0.08)'};
+
+    /* 화면 높이 넘어가면 내부 스크롤 */
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+
+    /* 스크롤바 미니멀 */
+    scrollbar-width: thin;
+    scrollbar-color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#3a3a3a #222' : '#cfcfcf #f5f5f5'};
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#3a3a3a' : '#cfcfcf'};
+        border-radius: 20px;
+    }
+    &::-webkit-scrollbar-track {
+        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#222' : '#f5f5f5'};
+        border-radius: 20px;
+    }
+
+    .nav-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin: 4px 8px 10px;
+        color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#eaeaea' : '#222'};
+        letter-spacing: .02em;
+    }
 
     ul {
         list-style: none;
-        padding: 0;
+        padding: 0 4px;
+        margin: 0;
     }
 
     li {
-        margin-bottom: 10px;
+        margin: 2px 4px;
+        padding: 6px 8px;
+        border-radius: 8px;
         cursor: pointer;
+        color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#d7d7d7' : '#444'};
+        font-size: 0.92rem;
+        line-height: 1.35;
+        transition: background 0.15s ease, color 0.15s ease, transform 0.05s ease;
+        position: relative;
+    }
+
+    /* 단계별 들여쓰기 가이드 라인 느낌 */
+    li::before {
+        content: '';
+        position: absolute;
+        left: 6px;
+        top: 10px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#666' : '#c7c7c7'};
+        opacity: 0.8;
+    }
+
+    li:hover {
+        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)'};
+        color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#fff' : '#111'};
+    }
+
+    /* 활성 항목 스타일 */
+    li.active {
+        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'};
+        color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#fff' : '#111'};
+        font-weight: 600;
     }
 
     @media (max-width: 768px) {
