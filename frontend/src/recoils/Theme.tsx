@@ -1,8 +1,8 @@
 import { atom } from 'recoil'
 
 export enum ThemeFlag {
-  light,
-  dark,
+  light = 'light',
+  dark = 'dark',
 }
 
 export const themeState = atom<ThemeFlag>({

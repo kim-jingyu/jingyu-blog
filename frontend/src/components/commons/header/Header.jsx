@@ -27,10 +27,6 @@ function Header() {
         }
     }, []);
 
-    const changeTheme = () => {
-        setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-    };
-
     const clickLoginButton = () => {
         navigate("/login");
     };
@@ -69,9 +65,6 @@ function Header() {
                     진규의 블로그😜
                 </Logo>
                 <ButtonGroup themeStyle={themeStyle}>
-                    <Button onClick={changeTheme} themeStyle={themeStyle}>
-                        Theme
-                    </Button>
                     {role === "ADMIN" ? (
                         <Button onClick={clickWriteButton} themeStyle={themeStyle}>
                             Write
