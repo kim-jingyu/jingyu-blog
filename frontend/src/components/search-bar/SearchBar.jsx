@@ -1,19 +1,40 @@
 import PropTypes from "prop-types";
 import { useRecoilState } from "recoil";
 import { searchKeywordState } from "../../recoils/PostAtoms";
-import { SearchInput, SearchButton, SearchContainer } from "./SearchBar.style";
+import { SearchInput, SearchContainer } from "./SearchBar.style";
+import debounce from "lodash/debounce";
+import React, {useMemo} from "react";
 
 function SearchBar({search, onChange}) {
     const [_, setKeyword] = useRecoilState(searchKeywordState);
 
-    const handleSearch = () => {
-        setKeyword(search);
-    }
+    const debouncedSearch = useMemo(() => {
+        return debounce((value) => {
+            setKeyword(value);
+        }, 500);
+    }, [setKeyword]);
+
+    const handleInputChange = (e) => {
+        const { value } = e.target;
+        onChange(e);
+        debouncedSearch(value);
+    };
+
+    React.useEffect(() => {
+        return () => {
+            debouncedSearch.cancel();
+        };
+    }, [debouncedSearch]);
 
     return (
         <SearchContainer>
-            <SearchInput className="input" type="text" value={search} onChange={onChange} placeholder="검색어를 입력하세요." />
-            <SearchButton onClick={handleSearch}>🔎</SearchButton>
+            <SearchInput
+                className="input"
+                type="text"
+                value={search}
+                onChange={handleInputChange}
+                placeholder="검색어 입력"
+            />
         </SearchContainer>
     )
 }
