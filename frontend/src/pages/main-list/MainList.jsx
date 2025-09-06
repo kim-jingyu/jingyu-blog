@@ -38,7 +38,7 @@ function MainList() {
         if (searchKeyword && searchResults.state === 'hasValue') {
             setPosts(searchResults.contents);
             setHasMore(false);
-        } else if (fetchPostsLoadable.state == 'hasValue') {
+        } else if (fetchPostsLoadable.state === 'hasValue') {
             loadMorePosts();
         }
     }, [searchKeyword, searchResults.state, fetchPostsLoadable.state]);;

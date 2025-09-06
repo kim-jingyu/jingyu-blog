@@ -24,8 +24,7 @@ const KakaoLoginCallback = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          const accessToken = data.accessToken; 
-          console.log('Access Token:', accessToken);
+          const accessToken = data.accessToken;
           localStorage.setItem('accessToken', accessToken);
           const payloadObj = jwtDecode(accessToken);
           const memberId = payloadObj.sub;

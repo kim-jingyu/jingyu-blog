@@ -53,7 +53,6 @@ const PostDetail = () => {
             if (token) {
                 try {
                     const decodedToken = jwtDecode(token);
-                    console.log('권한: ',decodedToken.role);
                     setUserRole(decodedToken.role);
                 } catch (error) {
                     console.error("Invalid token", error);
