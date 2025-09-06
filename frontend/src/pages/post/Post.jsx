@@ -207,15 +207,12 @@ const Post = () => {
                     }}
                     onPaste={handlePaste}
                 />
-                <div>
-                    <HashtagInput
-                        placeholder="해시태그를 입력하고 Space를 누르세요"
-                        value={hashtag}
-                        onChange={(e) => setHashtag(e.target.value)}
-                        onKeyDown={handleAddHashtag}
-                    />
-                    <Button type="submit">글 작성</Button>
-                </div>
+                <HashtagInput
+                    placeholder="해시태그를 입력하고 Space를 누르세요"
+                    value={hashtag}
+                    onChange={(e) => setHashtag(e.target.value)}
+                    onKeyDown={handleAddHashtag}
+                />
                 <HashtagList>
                     {hashtags.map((tag, index) => (
                         <HashtagItem key={index} onClick={() => handleRemoveHashtag(tag)}>
@@ -223,6 +220,7 @@ const Post = () => {
                         </HashtagItem>
                     ))}
                 </HashtagList>
+                <Button type="submit">글 작성</Button>
             </form>
         </PostContainer>
     );
