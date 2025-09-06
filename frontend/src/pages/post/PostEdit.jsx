@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PostContainer, InputField, Button, HashtagInput, HashtagList, HashtagItem, StyledMDEditor } from './Post.style';
 import { privateApi } from '../../apis/axiosInstance';
 import MDEditor, { commands } from '@uiw/react-md-editor';
+import {ThemeFlag, themeState} from "../../recoils/Theme";
+import {useRecoilState} from "recoil";
 
 const PostEdit = () => {
     const [title, setTitle] = useState('');
@@ -11,6 +13,7 @@ const PostEdit = () => {
     const [hashtag, setHashtag] = useState('');
     const navigate = useNavigate();
     const { postId } = useParams();
+    const [theme] = useRecoilState(themeState);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -199,7 +202,7 @@ const PostEdit = () => {
                 <StyledMDEditor
                     value={contents}
                     onChange={setContents}
-                    theme="dark"
+                    data-color-mode={theme === ThemeFlag.dark ? ThemeFlag.dark : ThemeFlag.light}
                     commands={[...commands.getCommands(), uploadImageCommand]}
                     onDrop={async (e) => {
                         e.preventDefault();
@@ -218,12 +221,15 @@ const PostEdit = () => {
                     }}
                     onPaste={handlePaste}
                 />
-                <HashtagInput
-                    placeholder="해시태그를 입력하고 Space를 누르세요"
-                    value={hashtag}
-                    onChange={(e) => setHashtag(e.target.value)}
-                    onKeyDown={handleAddHashtag}
-                />
+                <div>
+                    <HashtagInput
+                        placeholder="해시태그를 입력하고 Space를 누르세요"
+                        value={hashtag}
+                        onChange={(e) => setHashtag(e.target.value)}
+                        onKeyDown={handleAddHashtag}
+                    />
+                    <Button type="submit">글 수정</Button>
+                </div>
                 <HashtagList>
                     {hashtags.map((tag, index) => (
                         <HashtagItem key={index} onClick={() => handleRemoveHashtag(tag)}>
@@ -231,7 +237,6 @@ const PostEdit = () => {
                         </HashtagItem>
                     ))}
                 </HashtagList>
-                <Button type="submit">글 수정</Button>
             </form>
         </PostContainer>
     );
