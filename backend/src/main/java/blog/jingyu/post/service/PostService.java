@@ -45,7 +45,7 @@ public class PostService {
     }
 
     public Page<PostResponse> getPosts(int page) {
-        Page<Post> allPost = postRepository.findAll(PageRequest.of(page, 5, Sort.Direction.ASC, "postId"));
+        Page<Post> allPost = postRepository.findAll(PageRequest.of(page, 10, Sort.Direction.ASC, "postId"));
         return allPost.map(PostResponse::new);
     }
 
