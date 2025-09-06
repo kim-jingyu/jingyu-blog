@@ -2,7 +2,7 @@ import axios from 'axios'
 import {jwtDecode} from "jwt-decode";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const BASE_URL = `${API_URL}`
+const BASE_URL = `${API_URL}/api`
 axios.defaults.withCredentials = true;
 
 export const publicApi = axios.create({
