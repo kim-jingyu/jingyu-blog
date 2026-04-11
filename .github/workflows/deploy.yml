@@ -50,12 +50,12 @@ jobs:
       
           docker push $DOCKERHUB_USERNAME/frontend
 
-      - name: Deploy to EC2 - docker-compose with ENV
+      - name: Deploy to ORACLE - docker-compose with ENV
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ env.EC2_HOST }}
-          username: ${{ env.EC2_USER }}
-          key: ${{ env.EC2_KEY }}
+          host: ${{ env.ORACLE_HOST }}
+          username: ${{ env.ORACLE_USER }}
+          key: ${{ env.ORACLE_KEY }}
           script: |
             cd /home/ubuntu/jingyu-blog
             git pull origin main
