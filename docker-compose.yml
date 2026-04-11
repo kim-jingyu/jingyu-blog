@@ -6,6 +6,9 @@ services:
     restart: always
     env_file:
       - ./backend/.env
+    environment:
+      - ORACLE_TNS_PATH=/app/wallet
+      - SPRING_DATA_REDIS_HOST=redis
     ports:
       - "8080:8080"
     networks:
