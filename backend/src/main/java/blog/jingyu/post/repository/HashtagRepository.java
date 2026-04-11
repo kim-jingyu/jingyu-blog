@@ -1,7 +1,7 @@
 package blog.jingyu.post.repository;
 
 import blog.jingyu.post.domain.Hashtag;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface HashtagRepository extends MongoRepository<Hashtag, String> {
+public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 }

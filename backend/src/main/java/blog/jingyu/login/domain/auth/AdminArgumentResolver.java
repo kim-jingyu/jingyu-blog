@@ -48,7 +48,7 @@ public class AdminArgumentResolver implements HandlerMethodArgumentResolver {
         String accessToken = bearerExtractor.extractAccessToken(webRequest.getHeader(AUTHORIZATION));
         jwtProvider.validateTokens(new MemberTokens(accessToken, refreshToken));
 
-        String adminId = String.valueOf(jwtProvider.getSubject(accessToken));
+        Long adminId = Long.valueOf(jwtProvider.getSubject(accessToken));
         if (!adminRepository.existsById(adminId)) {
             throw new MemberNotFoundException();
         }

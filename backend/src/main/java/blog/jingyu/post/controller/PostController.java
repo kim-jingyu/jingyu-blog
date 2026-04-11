@@ -35,14 +35,14 @@ public class PostController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable("id") String id) {
+    public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable("id") Long id) {
         return ResponseEntity.ok()
                 .body(postService.getPostDetail(id));
     }
 
     @AdminOnly
     @PostMapping
-    public ResponseEntity<String> makePost(@AdminCheck Accessor accessor, @RequestBody PostRequest postRequest) {
+    public ResponseEntity<Long> makePost(@AdminCheck Accessor accessor, @RequestBody PostRequest postRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postService.makePost(accessor.getMemberId(), postRequest));
     }
@@ -69,7 +69,7 @@ public class PostController {
 
     @AdminOnly
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<PostResponse> editPost(@AdminCheck Accessor accessor, @PathVariable("id") String id, @RequestBody PostEditRequest postEditRequest) {
+    public ResponseEntity<PostResponse> editPost(@AdminCheck Accessor accessor, @PathVariable("id") Long id, @RequestBody PostEditRequest postEditRequest) {
         log.info("accessor.getMemberId = {}, accessor.getAuthority = {}", accessor.getMemberId(), accessor.getAuthority());
         return ResponseEntity.ok()
                 .body(postService.editPost(id, postEditRequest));
@@ -83,21 +83,21 @@ public class PostController {
 
     @MemberOnly
     @PostMapping(value = "/{id}/comments")
-    public ResponseEntity<CommentsResponse> makeComment(@MemberCheck Accessor accessor, @PathVariable("id") String id, @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<CommentsResponse> makeComment(@MemberCheck Accessor accessor, @PathVariable("id") Long id, @RequestBody CommentRequest commentRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postService.makeComment(accessor.getMemberId(), commentRequest, id));
     }
 
     @AdminOnly
     @DeleteMapping(value = "/{postId}/comments/{commentId}/by-admin")
-    public ResponseEntity<Void> deleteCommentByAdmin(@AdminCheck Accessor accessor, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId) {
+    public ResponseEntity<Void> deleteCommentByAdmin(@AdminCheck Accessor accessor, @PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
         postService.deleteCommentByAdmin(accessor.getMemberId(), postId, commentId);
         return ResponseEntity.ok().build();
     }
 
     @MemberOnly
     @DeleteMapping(value = "/{postId}/comments/{commentId}/by-member")
-    public ResponseEntity<Void> deleteCommentByMember(@MemberCheck Accessor accessor, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId) {
+    public ResponseEntity<Void> deleteCommentByMember(@MemberCheck Accessor accessor, @PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
         postService.deleteCommentByMember(accessor.getMemberId(), postId, commentId);
         return ResponseEntity.ok().build();
     }

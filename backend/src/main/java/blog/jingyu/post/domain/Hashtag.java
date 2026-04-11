@@ -2,25 +2,29 @@ package blog.jingyu.post.domain;
 
 import blog.jingyu.global.entity.BaseEntity;
 import blog.jingyu.post.dto.HashtagRequest;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import static lombok.AccessLevel.PROTECTED;
 
-@Document(collection = "hashtag")
+@Entity
+@Table(name = "hashtag")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 @Getter
 @Builder
 public class Hashtag extends BaseEntity {
     @Id
-    private String hashtagId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "hashtag_id")
+    private Long hashtagId;
+
+    @Column(name = "content")
     private String content;
 
     @Setter
-    @DBRef
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
     private Post post;
 
     public static Hashtag createHashtag(HashtagRequest request) {

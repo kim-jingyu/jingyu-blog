@@ -11,11 +11,13 @@ import blog.jingyu.login.repository.RefreshTokenRepository;
 import blog.jingyu.member.domain.Member;
 import blog.jingyu.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static blog.jingyu.login.domain.auth.Authority.MEMBER;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor

@@ -35,7 +35,7 @@ class PostServiceTest {
     @Test
     public void writeTest () throws Exception {
         // given
-        String adminId = adminService.createAdmin(new AdminRequest("tester", "test123"));
+        Long adminId = adminService.createAdmin(new AdminRequest("tester", "test123"));
         PostRequest postRequest = new PostRequest("타이틀", "내용", List.of(new HashtagRequest("해시태그1"), new HashtagRequest("해시태그2")));
 
         // when

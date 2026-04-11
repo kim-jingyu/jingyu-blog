@@ -6,9 +6,8 @@ import blog.jingyu.post.dto.HashtagEditRequest;
 import blog.jingyu.post.dto.HashtagRequest;
 import blog.jingyu.post.dto.PostEditRequest;
 import blog.jingyu.post.dto.PostRequest;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,26 +16,35 @@ import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.PROTECTED;
 
-@Document(collection = "post")
+@Entity
+@Table(name = "post")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 @Getter
 @Builder
 public class Post extends BaseEntity {
     @Id
-    private String postId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
+    private Long postId;
 
+    @Column(name = "title")
     private String title;
 
+    @Lob
     private String contents;
 
     @Setter
     @Builder.Default
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hashtag> hashtags = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id")
     private Admin admin;
 
     @Builder.Default
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comments> comments = new ArrayList<>();
 
     public static Post createPost(Admin admin, PostRequest postRequest) {

@@ -49,7 +49,7 @@ public class PostService {
         return allPost.map(PostResponse::new);
     }
 
-    public PostDetailResponse getPostDetail(String postId) {
+    public PostDetailResponse getPostDetail(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
         PostDetailResponse postDetailResponse = new PostDetailResponse(post);
@@ -57,7 +57,7 @@ public class PostService {
     }
 
     @Transactional
-    public String makePost(String adminId, PostRequest postRequest) {
+    public Long makePost(Long adminId, PostRequest postRequest) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(MemberNotFoundException::new);
         Post post = postRepository.save(Post.createPost(admin, postRequest));
         post.setHashtags(hashtagRepository.saveAll(postRequest.hashtags().stream()
@@ -72,7 +72,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse editPost(String postId, PostEditRequest postEditRequest) {
+    public PostResponse editPost(Long postId, PostEditRequest postEditRequest) {
         Post editedPost = postRepository.getById(postId).editPost(postEditRequest);
 
         List<Hashtag> hashtags = editedPost.getHashtags();
@@ -137,7 +137,7 @@ public class PostService {
     }
 
     @Transactional
-    public CommentsResponse makeComment(String memberId, CommentRequest commentRequest, String postId) {
+    public CommentsResponse makeComment(Long memberId, CommentRequest commentRequest, Long postId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         Comments savedComment = commentsRepository.save(Comments.createComment(member, commentRequest, post));
@@ -147,7 +147,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deleteCommentByAdmin(String adminId, String postId, String commentId) {
+    public void deleteCommentByAdmin(Long adminId, Long postId, Long commentId) {
         Post foundPost = postRepository.findByPostIdAndAdmin_AdminId(postId, adminId).orElseThrow(PostNotFoundException::new);
         if (!foundPost.getComments().removeIf((comments -> comments.getCommentId().equals(commentId)))) {
             return;
@@ -157,7 +157,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deleteCommentByMember(String memberId, String postId, String commentId) {
+    public void deleteCommentByMember(Long memberId, Long postId, Long commentId) {
         commentsRepository.findByCommentIdAndMember_MemberId(commentId, memberId).orElseThrow(CommentNotFoundException::new);
 
         Post foundPost = postRepository.getById(postId);

@@ -30,14 +30,14 @@ public class AdminService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final BearerExtractor bearerExtractor;
 
-    public String createAdmin(AdminRequest request) {
+    public Long createAdmin(AdminRequest request) {
         if (adminRepository.existsByLoginId(request.loginId())) {
             throw new AdminAlreadyExistsException();
         }
         return adminRepository.save(Admin.createAdmin(request.loginId(), passwordEncoder.encode(request.password()))).getAdminId();
     }
 
-    public String updatePassword(String adminId, AdminPwUpdateRequest request) {
+    public Long updatePassword(Long adminId, AdminPwUpdateRequest request) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(MemberNotFoundException::new);
         if (!passwordEncoder.match(request.password(), admin.getPassword())) {
             throw new AuthException();

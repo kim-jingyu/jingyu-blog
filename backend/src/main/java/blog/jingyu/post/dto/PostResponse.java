@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record PostResponse(String postId, String title, String content, ZonedDateTime date, List<HashtagResponse> hashtags) {
+public record PostResponse(Long postId, String title, String content, ZonedDateTime date, List<HashtagResponse> hashtags) {
     public PostResponse(Post post) {
         this(post.getPostId(),
                 post.getTitle(),

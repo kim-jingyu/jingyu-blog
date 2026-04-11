@@ -2,28 +2,34 @@ package blog.jingyu.admin.domain;
 
 import blog.jingyu.global.entity.BaseEntity;
 import blog.jingyu.post.domain.Post;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
 
-@Document(collection = "admin")
+@Entity
+@Table(name = "admin")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 @Getter
 public class Admin extends BaseEntity {
     @Id
-    private String adminId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "admin_id")
+    private Long adminId;
 
+    @Column(name = "login_id")
     private String loginId;
+
+    @Column(name = "password")
     private String password;
 
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> post;
 
     @Builder
