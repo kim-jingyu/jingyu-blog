@@ -13,9 +13,9 @@ jobs:
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      ORACLE_HOST: ${{ secrets.EC2_HOST }}
+      ORACLE_HOST: ${{ secrets.ORACLE_HOST }}
       ORACLE_USER: ubuntu
-      ORACLE_KEY: ${{ secrets.EC2_KEY }}
+      ORACLE_KEY: ${{ secrets.ORACLE_KEY }}
       ENV_BACKEND: ${{ secrets.ENV_BACKEND }}
       ENV_FRONTEND: ${{ secrets.ENV_FRONTEND }}
 
