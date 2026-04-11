@@ -10,18 +10,14 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
 
   jpa:
+    database: oracle
+    database-platform: org.hibernate.dialect.OracleDialect
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-
-  #  data:
-  #    mongodb:
-  #      uri: mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@jingyulog.hoauz.mongodb.net/?retryWrites=true&w=majority&appName=jingyulog
-  #      database: jingyulog
-  #      auto-index-creation: true
 
   redis:
     host: localhost
