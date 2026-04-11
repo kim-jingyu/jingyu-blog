@@ -11,6 +11,8 @@ services:
       - SPRING_DATA_REDIS_HOST=redis
     ports:
       - "8080:8080"
+    volumes:
+      - /home/ubuntu/oracle/Wallet_jingyulog:/app/wallet
     networks:
       - jingyu
 
