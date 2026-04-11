@@ -1,5 +1,4 @@
 import axios from 'axios'
-import {jwtDecode} from "jwt-decode";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const BASE_URL = `${API_URL}/api`
@@ -34,22 +33,7 @@ privateApi.interceptors.response.use(
         if (error.response && error.response.status == 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                const token = localStorage.getItem('accessToken');
-                let userRole = null;
-                if (token) {
-                    try {
-                        const decodedToken = jwtDecode(token);
-                        userRole = decodedToken.role;
-                    } catch (error) {
-                        console.error("Invalid token", error);
-                    }
-                }
-                let response = null;
-                if (userRole === 'ADMIN') {
-                    response = await postAdminRefreshToken(token);
-                } else if (userRole === 'MEMBER') {
-                    response = await postMemberRefreshToken(token);
-                }
+                const response = await postRefreshToken();
                 const newAccessToken = response.data.accessToken;
                 localStorage.setItem('accessToken', newAccessToken);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
@@ -64,18 +48,12 @@ privateApi.interceptors.response.use(
     }
 )
 
-export async function postMemberRefreshToken(token) {
-    return await publicApi.post('/token', {}, {
+export async function postRefreshToken() {
+    const token = localStorage.getItem('accessToken');
+    const response = await publicApi.post('/token', {}, {
         headers: {
             Authorization: `Bearer ${token}`
         }
-    });
-}
-
-export async function postAdminRefreshToken(token) {
-    return await publicApi.post('/admin/token', {}, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
+    })
+    return response;
 }
