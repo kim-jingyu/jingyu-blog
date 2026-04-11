@@ -10,8 +10,6 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
 
   jpa:
-    database: oracle
-    database-platform: org.hibernate.dialect.OracleDialect
     hibernate:
       ddl-auto: update
     show-sql: true
