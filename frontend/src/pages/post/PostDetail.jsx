@@ -18,6 +18,7 @@ import { useRecoilValue } from 'recoil';
 import { themeState } from '../../recoils/Theme';
 import CommentModal from '../../components/post/CommentModal';
 import {jwtDecode} from "jwt-decode";
+import {HttpStatusCode} from "axios";
 
 const extractHeadings = (markdown) => {
     const headings = [];
@@ -112,6 +113,18 @@ const PostDetail = () => {
         }
     };
 
+    const handleDeletePost = async () => {
+        try {
+            const response = await privateApi.delete(`/post/${postId}`);
+            if (response.status === HttpStatusCode.Ok) {
+                alert(`${postId}번 글이 삭제되었습니다.`);
+            }
+        } catch (e) {
+            console.error(`${postId}번 글 삭제 실패. ${e}`);
+            alert(`${postId}번 글이 삭제되었습니다.`);
+        }
+    }
+
     return (
         <PostDetailContainer>
             <PostContainer style={{ flex: 1 }}>
@@ -119,9 +132,14 @@ const PostDetail = () => {
                     <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '10px' }}>
                         <Title>{post.title}</Title>
                         {userRole === 'ADMIN' && (
-                            <AdminEditButton onClick={handleEditPost} style={{ marginLeft: '10px' }}>
-                                ️ ✏️
-                            </AdminEditButton>
+                            <div>
+                                <AdminEditButton onClick={handleEditPost} style={{ marginLeft: '10px' }}>
+                                    ️ ✏️
+                                </AdminEditButton>
+                                <AdminEditButton onClick={handleDeletePost} style={{ marginLeft: '10px' }}>
+                                    ️ ❌
+                                </AdminEditButton>
+                            </div>
                         )}
                     </div>
                     <DateInfo>{new Date(post.date).toLocaleString('ko-KR')}</DateInfo>
