@@ -184,19 +184,19 @@ const PostDetail = () => {
                 </CommentSection>
             </PostContainer>
 
-            <NavContainer>
-                <ul>
-                    {headings.map((heading, index) => (
-                        <li
-                            key={index}
-                            style={{ marginLeft: `${(heading.level - 1) * 10}px` }}
-                            onClick={() => handleClick(heading.id)}
-                        >
-                            {heading.text}
-                        </li>
-                    ))}
-                </ul>
-            </NavContainer>
+            {/*<NavContainer>*/}
+            {/*    <ul>*/}
+            {/*        {headings.map((heading, index) => (*/}
+            {/*            <li*/}
+            {/*                key={index}*/}
+            {/*                style={{ marginLeft: `${(heading.level - 1) * 10}px` }}*/}
+            {/*                onClick={() => handleClick(heading.id)}*/}
+            {/*            >*/}
+            {/*                {heading.text}*/}
+            {/*            </li>*/}
+            {/*        ))}*/}
+            {/*    </ul>*/}
+            {/*</NavContainer>*/}
 
             {isModalOpen && (
                 <CommentModal
