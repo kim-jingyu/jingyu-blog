@@ -168,4 +168,10 @@ public class PostService {
         commentsRepository.deleteById(commentId);
         postRepository.save(foundPost);
     }
+
+    @Transactional
+    public void deletePost(Long adminId, Long postId) {
+        Post foundPost = postRepository.findByPostIdAndAdmin_AdminId(postId, adminId).orElseThrow(PostNotFoundException::new);
+        postRepository.delete(foundPost);
+    }
 }

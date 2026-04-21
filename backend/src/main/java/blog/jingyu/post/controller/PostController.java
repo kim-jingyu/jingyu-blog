@@ -75,6 +75,14 @@ public class PostController {
                 .body(postService.editPost(id, postEditRequest));
     }
 
+    @AdminOnly
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deletePost(@AdminCheck Accessor accessor, @PathVariable("id") Long id) {
+        postService.deletePost(accessor.getMemberId(), id);
+        return ResponseEntity.ok()
+                .build();
+    }
+
     @GetMapping(value = "/search")
     public ResponseEntity<List<PostResponse>> searchPost(@RequestParam String keyword) {
         return ResponseEntity.ok()
