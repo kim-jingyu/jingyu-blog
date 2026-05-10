@@ -143,6 +143,10 @@ export const Title = styled.h1`
 `;
 
 export const StyledMarkdown = styled(MDEditor.Markdown)`
+    h1, h2, h3, h4, h5, h6 {
+        scroll-margin-top: 80px;
+    }
+    
     table {
         width: 100%;
         border-collapse: collapse;
