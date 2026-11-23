@@ -33,7 +33,7 @@ function SearchBar({search, onChange}) {
                 type="text"
                 value={search}
                 onChange={handleInputChange}
-                placeholder="검색어 입력"
+                placeholder="글 검색"
             />
         </SearchContainer>
     )

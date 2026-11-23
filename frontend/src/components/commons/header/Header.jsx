@@ -1,17 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { Button, ButtonGroup, HeaderContainer, LogoWrapper, Logo, SearchBarWrapper } from "./Header.style";
+import { Button, ButtonGroup, HeaderContainer, HeaderInner, LogoWrapper, Logo, SearchBarWrapper } from "./Header.style";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { privateApi } from "../../../apis/axiosInstance";
-import { useRecoilState } from "recoil";
-import { themeState } from "../../../recoils/Theme";
 import SearchBar from "../../search-bar/SearchBar";
 
 function Header() {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState(null);
-    const [theme, setTheme] = useRecoilState(themeState);
     const [search, setSearch] = useState("");
 
     useEffect(() => {
@@ -53,38 +50,35 @@ function Header() {
         setSearch(e.target.value);
     };
 
-    const themeStyle = {
-        backgroundColor: theme === "dark" ? "#292929" : "#fff",
-        textColor: theme === "dark" ? "#fff" : "#000",
-    };
-
     return (
-        <HeaderContainer themeStyle={themeStyle}>
-            <LogoWrapper>
-                <Logo href="/" themeStyle={themeStyle}>
-                    진규의 블로그😜
-                </Logo>
-                <ButtonGroup themeStyle={themeStyle}>
-                    {role === "ADMIN" ? (
-                        <Button onClick={clickWriteButton} themeStyle={themeStyle}>
-                            Write
-                        </Button>
-                    ) : null}
-                    {isLoggedIn ? (
-                        <Button onClick={clickLogoutButton} themeStyle={themeStyle}>
-                            Logout
-                        </Button>
-                    ) : (
-                        <Button onClick={clickLoginButton} themeStyle={themeStyle}>
-                            Login
-                        </Button>
-                    )}
-                </ButtonGroup>
-            </LogoWrapper>
+        <HeaderContainer>
+            <HeaderInner>
+                <LogoWrapper>
+                    <Logo href="/">
+                        진규의 블로그<span aria-hidden="true">😜</span>
+                    </Logo>
+                    <ButtonGroup>
+                        {role === "ADMIN" ? (
+                            <Button $primary onClick={clickWriteButton}>
+                                글쓰기
+                            </Button>
+                        ) : null}
+                        {isLoggedIn ? (
+                            <Button onClick={clickLogoutButton}>
+                                로그아웃
+                            </Button>
+                        ) : (
+                            <Button onClick={clickLoginButton}>
+                                로그인
+                            </Button>
+                        )}
+                    </ButtonGroup>
+                </LogoWrapper>
 
-            <SearchBarWrapper>
-                <SearchBar search={search} onChange={handleSearchChange} />
-            </SearchBarWrapper>
+                <SearchBarWrapper>
+                    <SearchBar search={search} onChange={handleSearchChange} />
+                </SearchBarWrapper>
+            </HeaderInner>
         </HeaderContainer>
     );
 }

@@ -5,7 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { fetchPostSelector, hasMoreState, pageState, postState, searchKeywordState, searchPostSelector } from "../../recoils/PostAtoms";
 import { useNavigate } from "react-router-dom";
-import { MainContainer } from "./MainList.style";
+import { MainContainer, StatusText } from "./MainList.style";
 
 
 function MainList() {
@@ -54,7 +54,8 @@ function MainList() {
                 dataLength={posts.length}
                 next={loadMorePosts}
                 hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
+                loader={<StatusText>불러오는 중…</StatusText>}
+                endMessage={posts.length === 0 ? <StatusText>{searchKeyword ? '검색 결과가 없습니다.' : '아직 작성된 글이 없습니다.'}</StatusText> : null}
             >
                 {posts.map((post) => (
                     <Post 
@@ -64,10 +65,7 @@ function MainList() {
                             timeZone: 'Asia/Seoul',
                             year: 'numeric',
                             month: '2-digit',
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit'
+                            day: '2-digit'
                         })}
                         content={post.content}
                         onClick={() => clickDetailPost(post.postId)}

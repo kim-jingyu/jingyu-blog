@@ -3,19 +3,32 @@ import {useNavigate, useParams} from 'react-router-dom';
 import { privateApi } from '../../apis/axiosInstance';
 import {
     PostContainer,
+    PostDetailContainer,
+    PostHeader,
+    BackLink,
     Title,
+    MetaRow,
     DateInfo,
+    AdminActions,
+    AdminEditButton,
     HashtagList,
     HashtagItem,
+    TocBox,
+    TocTitle,
+    TocItem,
     StyledMarkdown,
     CommentSection,
+    CommentHeader,
+    CommentCount,
     CommentList,
     CommentItem,
+    CommentMeta,
+    CommentBody,
+    CommentDeleteButton,
+    EmptyComment,
     AddCommentButton,
-    NavContainer, PostDetailContainer, AdminEditButton
+    StatusText,
 } from './PostDetail.style';
-import { useRecoilValue } from 'recoil';
-import { themeState } from '../../recoils/Theme';
 import CommentModal from '../../components/post/CommentModal';
 import {jwtDecode} from "jwt-decode";
 import {HttpStatusCode} from "axios";
@@ -49,7 +62,6 @@ const PostDetail = () => {
     const [headings, setHeadings] = useState([]);
     const [comments, setComments] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const theme = useRecoilValue(themeState);
     const [userRole, setUserRole] = useState(null);
     const navigate = useNavigate();
 
@@ -86,8 +98,8 @@ const PostDetail = () => {
         fetchPostDetail();
     }, [postId]);
 
-    if (loading) return <h4>Loading...</h4>;
-    if (error) return <p>{error}</p>;
+    if (loading) return <StatusText>불러오는 중…</StatusText>;
+    if (error) return <StatusText>{error}</StatusText>;
 
     const handleClick = (id) => {
         const element = document.getElementById(id);
@@ -137,131 +149,116 @@ const PostDetail = () => {
         h4: ({node, ...props}) => <h4 id={slugify(props?.children?.toString() || '')} {...props} />,
     };
 
+    const handleDeleteComment = async (commentId) => {
+        if (!window.confirm('댓글을 삭제할까요?')) return;
+        try {
+            const url = userRole === 'ADMIN'
+                ? `/post/${postId}/comments/${commentId}/by-admin`
+                : `/post/${postId}/comments/${commentId}/by-member`;
+            await privateApi.delete(url);
+            setComments((prev) => prev.filter((c) => c.commentId !== commentId));
+            alert('댓글이 삭제되었습니다.')
+        } catch (err) {
+            console.error("댓글 삭제 실패", err);
+            alert('댓글 삭제에 실패했습니다.');
+        }
+    };
+
+    const formatDate = (date) => new Date(date).toLocaleString('ko-KR', {
+        timeZone: 'Asia/Seoul',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+
+    const canComment = userRole === 'MEMBER' || userRole === 'ADMIN';
+
     return (
         <PostDetailContainer>
-            <PostContainer style={{ flex: 1 }}>
-                <div>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <Title>{post.title}</Title>
+            <PostContainer>
+                <BackLink href="/">← 전체 글</BackLink>
+
+                <PostHeader>
+                    <Title>{post.title}</Title>
+                    <MetaRow>
+                        <DateInfo>{formatDate(post.date)}</DateInfo>
                         {userRole === 'ADMIN' && (
-                            <div>
-                                <AdminEditButton onClick={handleEditPost} style={{ marginLeft: '10px' }}>
-                                    ️ ✏️
+                            <AdminActions>
+                                <AdminEditButton onClick={handleEditPost}>수정</AdminEditButton>
+                                <AdminEditButton
+                                    $danger
+                                    onClick={() => {
+                                        if (window.confirm('이 글을 삭제할까요?')) handleDeletePost();
+                                    }}
+                                >
+                                    삭제
                                 </AdminEditButton>
-                                <AdminEditButton onClick={handleDeletePost} style={{ marginLeft: '10px' }}>
-                                    ️ ❌
-                                </AdminEditButton>
-                            </div>
+                            </AdminActions>
                         )}
-                    </div>
-                    <DateInfo>{new Date(post.date).toLocaleString('ko-KR')}</DateInfo>
-
-                    {headings.length > 0 && (
-                        <nav style={{
-                            margin: '20px 0 40px 0',
-                            padding: '16px 20px',
-                            backgroundColor: theme === 'dark' ? '#2d2d2d' : '#f9f9f9',
-                            borderRadius: '8px',
-                            borderLeft: `4px solid ${theme === 'dark' ? '#444' : '#eee'}`
-                        }}>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#888', marginBottom: '12px' }}>목차</div>
-                            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                                {headings.map((heading, index) => (
-                                    <li
-                                        key={index}
-                                        onClick={() => handleClick(heading.id)}
-                                        style={{
-                                            marginLeft: `${(heading.level - 1) * 16}px`,
-                                            padding: '4px 0',
-                                            fontSize: '14px',
-                                            cursor: 'pointer',
-                                            color: theme === 'dark' ? '#bbb' : '#555',
-                                            transition: 'color 0.2s',
-                                            textDecoration: 'underline transparent',
-                                            textUnderlineOffset: '4px'
-                                        }}
-                                        onMouseEnter={(e) => e.target.style.color = theme === 'dark' ? '#fff' : '#000'}
-                                        onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? '#bbb' : '#555'}
-                                    >
-                                        {heading.text}
-                                    </li>
-                                ))}
-                            </ul>
-                        </nav>
+                    </MetaRow>
+                    {post.hashtags?.length > 0 && (
+                        <HashtagList>
+                            {post.hashtags.map((hashtag, index) => (
+                                <HashtagItem key={index}>#{hashtag.content}</HashtagItem>
+                            ))}
+                        </HashtagList>
                     )}
+                </PostHeader>
 
-                    <StyledMarkdown source={post.content} components={MarkdownComponents} />
-                </div>
-                <HashtagList>
-                    {post.hashtags.map((hashtag, index) => (
-                        <HashtagItem key={index}>#{hashtag.content}</HashtagItem>
-                    ))}
-                </HashtagList>
+                {headings.length > 0 && (
+                    <TocBox aria-label="목차">
+                        <TocTitle>목차</TocTitle>
+                        <ul>
+                            {headings.map((heading, index) => (
+                                <TocItem
+                                    key={index}
+                                    $level={heading.level}
+                                    onClick={() => handleClick(heading.id)}
+                                >
+                                    {heading.text}
+                                </TocItem>
+                            ))}
+                        </ul>
+                    </TocBox>
+                )}
+
+                <StyledMarkdown source={post.content} components={MarkdownComponents} />
+
                 <CommentSection>
-                    <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-                        <h3 style={{ margin: 0 }}>댓글</h3>
-                        {(userRole === 'MEMBER' || userRole === 'ADMIN') && (
-                            <AddCommentButton onClick={() => setIsModalOpen(true)} style={{ marginLeft: '10px' }}>
-                                ✏️
+                    <CommentHeader>
+                        <h3>
+                            댓글 <CommentCount>{comments.length}</CommentCount>
+                        </h3>
+                        {canComment && (
+                            <AddCommentButton onClick={() => setIsModalOpen(true)}>
+                                댓글 쓰기
                             </AddCommentButton>
                         )}
-                    </div>
-                    <CommentList>
-                        {comments.map((comment) => (
-                            <CommentItem key={comment.commentId}>
-                                <p>
-                                    <span style={{ fontSize: '15px' }}>{comment.memberName}</span>
-                                    <span style={{ marginLeft: '10px', color: '#888', fontSize: '12px' }}>
-                                        . {new Date(comment.date).toLocaleString('ko-KR')}
-                                    </span>
-                                </p>
-                                <p style={{ marginTop: '10px' }}>{comment.content}</p>
-                                {(userRole === 'ADMIN' || userRole === 'MEMBER') && (
-                                    <button
-                                        onClick={async () => {
-                                            try {
-                                                const url = userRole === 'ADMIN'
-                                                    ? `/post/${postId}/comments/${comment.commentId}/by-admin`
-                                                    : `/post/${postId}/comments/${comment.commentId}/by-member`;
-                                                await privateApi.delete(url);
-                                                setComments((prev) => prev.filter((c) => c.commentId !== comment.commentId));
-                                                alert('댓글이 삭제되었습니다.')
-                                            } catch (err) {
-                                                console.error("댓글 삭제 실패", err);
-                                                alert('댓글 삭제에 실패했습니다.');
-                                            }
-                                        }}
-                                        style={{
-                                            marginTop: '5px',
-                                            fontSize: '12px',
-                                            color: 'red',
-                                            background: 'none',
-                                            border: 'none',
-                                            cursor: 'pointer'
-                                        }}
-                                    >
-                                        ❌ 댓글 삭제
-                                    </button>
-                                )}
-                            </CommentItem>
-                        ))}
-                    </CommentList>
+                    </CommentHeader>
+                    {comments.length === 0 ? (
+                        <EmptyComment>
+                            {canComment ? '첫 댓글을 남겨보세요.' : '아직 댓글이 없습니다.'}
+                        </EmptyComment>
+                    ) : (
+                        <CommentList>
+                            {comments.map((comment) => (
+                                <CommentItem key={comment.commentId}>
+                                    <CommentMeta>
+                                        <strong>{comment.memberName}</strong>
+                                        <small>{new Date(comment.date).toLocaleString('ko-KR')}</small>
+                                        {canComment && (
+                                            <CommentDeleteButton onClick={() => handleDeleteComment(comment.commentId)}>
+                                                삭제
+                                            </CommentDeleteButton>
+                                        )}
+                                    </CommentMeta>
+                                    <CommentBody>{comment.content}</CommentBody>
+                                </CommentItem>
+                            ))}
+                        </CommentList>
+                    )}
                 </CommentSection>
             </PostContainer>
-
-            {/*<NavContainer>*/}
-            {/*    <ul>*/}
-            {/*        {headings.map((heading, index) => (*/}
-            {/*            <li*/}
-            {/*                key={index}*/}
-            {/*                style={{ marginLeft: `${(heading.level - 1) * 10}px` }}*/}
-            {/*                onClick={() => handleClick(heading.id)}*/}
-            {/*            >*/}
-            {/*                {heading.text}*/}
-            {/*            </li>*/}
-            {/*        ))}*/}
-            {/*    </ul>*/}
-            {/*</NavContainer>*/}
 
             {isModalOpen && (
                 <CommentModal

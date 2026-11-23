@@ -1,248 +1,305 @@
 import MDEditor from '@uiw/react-md-editor';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const PostDetailContainer = styled.div`
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 50px;
+    justify-content: center;
     width: 100%;
-    padding: 0 20px;
-    gap: 24px; /* 사이 간격 추가 */
+    padding: 48px 20px 96px;
 
     @media (max-width: 768px) {
-        flex-direction: column; /* 모바일에서 세로 배치 */
-        gap: 12px;
-        padding: 0 12px;
-        width: 100%;
-        overflow-x: hidden; /* 가로 스크롤 방지 */
-    }
-
-    @media (max-width: 480px) {
-        margin-top: 20px; /* 더 작은 화면에서는 여백 최소화 */
-        padding: 0 10px; /* 좌우 패딩 추가 */
+        padding: 24px 16px 64px;
+        overflow-x: hidden;
     }
 `;
 
-export const PostContainer = styled.div`
+export const PostContainer = styled.article`
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    padding: 20px;
-    margin: 0 auto; /* 중앙 정렬을 유지 */
-    width: 100%; /* 기본적으로 화면 크기에 맞춤 */
-    max-width: 2000px; /* 최대 폭 제한 */
-    border-radius: 8px; /* 모서리 둥글게 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* 박스 그림자 추가 */
+    width: 100%;
+    max-width: ${({ theme }) => theme.maxWidth};
+    min-width: 0;
+`;
 
-    @media (max-width: 768px) {
-        width: 100%; /* 모바일 화면에서는 가로 폭을 화면에 꽉 채움 */
-        max-width: 100%; /* 100% 제한 */
-        min-width: 0; /* 콘텐츠로 인한 강제 확장 방지 */
-        margin: 0; /* 좌우 여백 제거 */
-        padding: 12px; /* 적절한 내부 패딩 */
-        box-sizing: border-box; /* 패딩 포함 폭 계산 */
+export const StatusText = styled.p`
+    width: 100%;
+    text-align: center;
+    padding: 120px 20px;
+    color: ${({ theme }) => theme.textMuted};
+`;
+
+export const BackLink = styled.a`
+    align-self: flex-start;
+    margin-bottom: 32px;
+    font-size: 0.9rem;
+    color: ${({ theme }) => theme.textMuted};
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+        color: ${({ theme }) => theme.color};
     }
 `;
 
-
-export const NavContainer = styled.nav`
-    position: sticky;
-    top: 10px;
-    width: 260px;
-    max-width: 300px;
-    min-width: 220px;
-    padding: 16px 12px;
-    height: max-content;
-    border-radius: 12px;
-    background: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#1e1e1e' : '#ffffff'};
-    border: 1px solid ${({ theme }) => theme?.backgroundColor === '#292929' ? '#2c2c2c' : 'rgba(0,0,0,0.08)'};
-    box-shadow: ${({ theme }) => theme?.backgroundColor === '#292929'
-    ? '0 6px 16px rgba(0,0,0,0.35)'
-    : '0 8px 24px rgba(0,0,0,0.08)'};
-
-    /* 화면 높이 넘어가면 내부 스크롤 */
-    max-height: calc(100vh - 120px);
-    overflow: auto;
-
-    /* 스크롤바 미니멀 */
-    scrollbar-width: thin;
-    scrollbar-color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#3a3a3a #222' : '#cfcfcf #f5f5f5'};
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#3a3a3a' : '#cfcfcf'};
-        border-radius: 20px;
-    }
-    &::-webkit-scrollbar-track {
-        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#222' : '#f5f5f5'};
-        border-radius: 20px;
-    }
-
-    .nav-title {
-        font-size: 0.95rem;
-        font-weight: 700;
-        margin: 4px 8px 10px;
-        color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#eaeaea' : '#222'};
-        letter-spacing: .02em;
-    }
-
-    ul {
-        list-style: none;
-        padding: 0 4px;
-        margin: 0;
-    }
-
-    li {
-        margin: 2px 4px;
-        padding: 6px 8px;
-        border-radius: 8px;
-        cursor: pointer;
-        color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#d7d7d7' : '#444'};
-        font-size: 0.92rem;
-        line-height: 1.35;
-        transition: background 0.15s ease, color 0.15s ease, transform 0.05s ease;
-        position: relative;
-    }
-
-    /* 단계별 들여쓰기 가이드 라인 느낌 */
-    li::before {
-        content: '';
-        position: absolute;
-        left: 6px;
-        top: 10px;
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#666' : '#c7c7c7'};
-        opacity: 0.8;
-    }
-
-    li:hover {
-        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)'};
-        color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#fff' : '#111'};
-    }
-
-    /* 활성 항목 스타일 */
-    li.active {
-        background: ${({ theme }) => theme?.backgroundColor === '#292929' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'};
-        color: ${({ theme }) => theme?.backgroundColor === '#292929' ? '#fff' : '#111'};
-        font-weight: 600;
-    }
-
-    @media (max-width: 768px) {
-        /* 모바일 화면에서 NavContainer 숨김 */
-        display: none;
-    }
+export const PostHeader = styled.header`
+    padding-bottom: 28px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid ${({ theme }) => theme.border};
 `;
-
 
 export const Title = styled.h1`
-    font-size: 24px;
-`;
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
 
-export const StyledMarkdown = styled(MDEditor.Markdown)`
-    h1, h2, h3, h4, h5, h6 {
-        scroll-margin-top: 80px;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1em 0;
-        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#232323' : '#fff'};
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    th, td {
-        border: 1px solid ${({ theme }) => theme.backgroundColor === '#292929' ? '#555' : '#ddd'};
-        padding: 0.6em 1em;
-        text-align: left;
-        color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#fafafa' : '#222'};
-        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#292929' : '#fff'};
-        font-size: 1em;
-        transition: background 0.2s;
-    }
-    th {
-        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#3b3b3b' : '#f7f7f7'};
-        font-weight: bold;
-        color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#fff' : '#111'};
-        letter-spacing: .03em;
-    }
-    tr {
-        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#232323' : '#fff'};
-    }
-    tr:nth-child(even) {
-        background-color: ${({ theme }) => theme.backgroundColor === '#292929' ? '#24272e' : '#fafbfc'};
+    @media (max-width: 768px) {
+        font-size: 1.75rem;
     }
 `;
 
-export const DateInfo = styled.div`
-    font-size: 14px;
-    color: gray;
-    margin-bottom: 10px;
+export const MetaRow = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+`;
+
+export const DateInfo = styled.time`
+    font-size: 0.9rem;
+    color: ${({ theme }) => theme.textMuted};
+`;
+
+export const AdminActions = styled.div`
+    display: flex;
+    gap: 4px;
+`;
+
+const ghostButton = css`
+    padding: 6px 12px;
+    border: none;
+    border-radius: ${({ theme }) => theme.radiusSm};
+    background-color: transparent;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: ${({ theme }) => theme.textMuted};
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        background-color: ${({ theme }) => theme.surfaceAlt};
+        color: ${({ theme }) => theme.color};
+    }
+
+    &:focus-visible {
+        outline: 2px solid ${({ theme }) => theme.accent};
+        outline-offset: 2px;
+    }
+`;
+
+export const AdminEditButton = styled.button`
+    ${ghostButton}
+
+    ${({ $danger, theme }) => $danger && css`
+        &:hover {
+            color: ${theme.danger};
+        }
+    `}
 `;
 
 export const HashtagList = styled.div`
     display: flex;
     flex-wrap: wrap;
-    margin-top: 20px; /* 본문과 간격 */
-    justify-content: flex-start; /* 좌측 정렬 */
+    gap: 8px;
+    margin-top: 16px;
 `;
 
 export const HashtagItem = styled.span`
-    background-color: #f0f0f0;
-    border-radius: 20px;
-    padding: 5px 10px;
-    margin-right: 5px;
-    font-size: 14px;
-    color: #333;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    background-color: ${({ theme }) => theme.accentSoft};
+    color: ${({ theme }) => theme.accent};
 `;
 
-export const CommentSection = styled.div`
-    margin-top: 40px;
-    padding: 20px;
-    border-top: 1px solid #ddd;
+export const TocBox = styled.nav`
+    margin-bottom: 40px;
+    padding: 18px 22px;
+    border-radius: ${({ theme }) => theme.radius};
+    background-color: ${({ theme }) => theme.surface};
+    border: 1px solid ${({ theme }) => theme.border};
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+`;
+
+export const TocTitle = styled.div`
+    margin-bottom: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: ${({ theme }) => theme.textMuted};
+`;
+
+export const TocItem = styled.li`
+    padding: 4px 0 4px ${({ $level }) => ($level - 1) * 16}px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    cursor: pointer;
+    color: ${({ theme }) => theme.textMuted};
+    transition: color 0.15s ease;
+
+    &:hover {
+        color: ${({ theme }) => theme.accent};
+    }
+`;
+
+export const StyledMarkdown = styled(MDEditor.Markdown)`
+    h1, h2, h3, h4, h5, h6 {
+        scroll-margin-top: 80px;
+        letter-spacing: -0.015em;
+    }
+
+    table {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.2em 0;
+        border-radius: ${({ theme }) => theme.radiusSm};
+        overflow: hidden;
+    }
+    th, td {
+        border: 1px solid ${({ theme }) => theme.border};
+        padding: 0.6em 1em;
+        text-align: left;
+        color: ${({ theme }) => theme.color};
+        background-color: transparent;
+    }
+    th {
+        background-color: ${({ theme }) => theme.surfaceAlt};
+        font-weight: 700;
+    }
+    tr {
+        background-color: transparent;
+        border-top: none;
+    }
+    tr:nth-child(even) {
+        background-color: ${({ theme }) => theme.surface};
+    }
+`;
+
+export const CommentSection = styled.section`
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid ${({ theme }) => theme.border};
+`;
+
+export const CommentHeader = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    h3 {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 700;
+    }
+`;
+
+export const CommentCount = styled.span`
+    margin-left: 4px;
+    color: ${({ theme }) => theme.accent};
+`;
+
+export const AddCommentButton = styled.button`
+    padding: 8px 16px;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.accent};
+    color: #fff;
+    transition: filter 0.15s ease;
+
+    &:hover {
+        filter: brightness(1.08);
+    }
+
+    &:focus-visible {
+        outline: 2px solid ${({ theme }) => theme.accent};
+        outline-offset: 2px;
+    }
+`;
+
+export const EmptyComment = styled.p`
+    margin: 0;
+    padding: 32px 0;
+    text-align: center;
+    font-size: 0.92rem;
+    color: ${({ theme }) => theme.textMuted};
 `;
 
 export const CommentList = styled.ul`
     list-style: none;
     padding: 0;
-    margin: 0 0 20px;
+    margin: 0;
 `;
 
 export const CommentItem = styled.li`
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    padding: 18px 0;
 
-    p {
-        margin: 0 0 5px;
+    & + & {
+        border-top: 1px solid ${({ theme }) => theme.border};
+    }
+`;
+
+export const CommentMeta = styled.div`
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+
+    strong {
+        font-size: 0.95rem;
+        font-weight: 700;
     }
 
     small {
-        color: gray;
         font-size: 0.8rem;
+        color: ${({ theme }) => theme.textMuted};
     }
 `;
 
-export const AddCommentButton = styled.button`
-    display: inline-block;
-    padding: 10px 20px;
-    border: none;
-    background-color: transparent;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
+export const CommentBody = styled.p`
+    margin: 8px 0 0;
+    font-size: 0.97rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 `;
 
-export const AdminEditButton = styled.button`
-    display: inline-block;
-    padding: 10px 20px;
+export const CommentDeleteButton = styled.button`
+    margin-left: auto;
+    padding: 2px 6px;
     border: none;
-    background-color: transparent;
-    border-radius: 5px;
-    font-size: 1rem;
+    background: none;
+    font-size: 0.8rem;
     cursor: pointer;
+    color: ${({ theme }) => theme.textMuted};
+    border-radius: 4px;
+
+    &:hover {
+        color: ${({ theme }) => theme.danger};
+    }
 `;

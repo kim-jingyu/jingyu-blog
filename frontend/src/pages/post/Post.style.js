@@ -10,20 +10,24 @@ export const PostContainer = styled.div`
     width: 100dvw;
     padding-top: 10px;
     padding-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
 // 입력 필드 스타일
 export const InputField = styled.input`
-    width: 70%;
+    width: 100%;
     background: transparent;
-    color: gray;
-    padding: 10px;
-    margin-bottom: 10px;
+    color: ${({ theme }) => theme.color};
+    padding: 16px 12px;
+    margin-bottom: 8px;
     border: none;
-    font-size: 16px;
+    border-bottom: 1px solid ${({ theme }) => theme.border};
+    font-size: 1.6rem;
+    font-weight: 700;
     outline: none;
+
+    &::placeholder {
+        color: ${({ theme }) => theme.textMuted};
+    }
 `;
 
 export const StyledMDEditor = styled(MDEditor)`
@@ -59,9 +63,9 @@ export const StyledMDEditor = styled(MDEditor)`
 
 // 해시태그 입력 필드
 export const HashtagInput = styled.input`
-    width: 20%;
+    width: min(360px, 60%);
     background: transparent;
-    color: gray;
+    color: ${({ theme }) => theme.color};
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -69,7 +73,15 @@ export const HashtagInput = styled.input`
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid ${({ theme }) => theme.border};
+
+    &::placeholder {
+        color: ${({ theme }) => theme.textMuted};
+    }
+
+    &:focus {
+        border-bottom-color: ${({ theme }) => theme.accent};
+    }
     font-size: 16px;
     outline: none;
 `;
@@ -84,33 +96,35 @@ export const HashtagList = styled.div`
 // 해시태그 항목
 export const HashtagItem = styled.span`
     display: inline-block;
-    background-color: #f0f0f0;
-    border-radius: 20px;
-    padding: 5px 10px;
+    background-color: ${({ theme }) => theme.accentSoft};
+    border-radius: 999px;
+    padding: 4px 12px;
     margin: 5px;
-    font-size: 14px;
-    color: #333;
+    font-size: 0.85rem;
+    color: ${({ theme }) => theme.accent};
     cursor: pointer;
     &:hover {
-        background-color: #e0e0e0;
+        text-decoration: line-through;
     }
 `;
 
 // 버튼 스타일
 export const Button = styled.button`
-    width: 5%;
-    padding: 12px;
-    background-color: #0095f6;
+    padding: 10px 24px;
+    background-color: ${({ theme }) => theme.accent};
     border: none;
-    border-radius: 4px;
+    border-radius: 999px;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
     cursor: pointer;
     margin-left: 20px;
     &:hover {
-        background-color: #007bbf;
+        filter: brightness(1.08);
     }
     &:disabled {
-        background-color: #b2dffc;
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 `;

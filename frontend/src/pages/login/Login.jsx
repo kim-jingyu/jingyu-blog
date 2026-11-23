@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'antd';
 
-import './Login.style';
 import {
   LoginWrapper,
+  BrandLink,
+  Divider,
   InputField,
   Links,
   LoginButton,
@@ -51,11 +52,12 @@ function Login() {
     <>
       <LoginWrapper>
         <LoginContainer>
+          <BrandLink href="/">진규의 블로그</BrandLink>
           <Title>로그인</Title>
-          <LoginForm>
+          <LoginForm onSubmit={login}>
             <InputField placeholder="아이디" value={loginId} onChange={(e) => setLoginId(e.target.value)} />
             <InputField type="password" placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <LoginButton onClick={login}>로그인</LoginButton>
+            <LoginButton type="submit">로그인</LoginButton>
           </LoginForm>
           <Options>
             <label>
@@ -66,6 +68,7 @@ function Login() {
               <a href="#">아이디 찾기</a> | <a href="#">비밀번호 찾기</a>
             </Links>
           </Options>
+          <Divider>또는</Divider>
           <SocialLogin>
             <GoogleButton style={{ textDecoration: 'none' }}>구글 로그인</GoogleButton>
             <KakaoButton style={{ textDecoration: 'none' }}>카카오 로그인</KakaoButton>

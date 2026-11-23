@@ -1,17 +1,29 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const HeaderContainer = styled.header`
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    margin-bottom: 32px;
+    background-color: ${({ theme }) => theme.isDark ? 'rgba(22, 24, 29, 0.85)' : 'rgba(255, 255, 255, 0.85)'};
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid ${({ theme }) => theme.border};
+`;
+
+export const HeaderInner = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    margin-bottom: 20px;
+    gap: 12px;
+    padding: 14px 0;
 
     @media (min-width: 769px) {
         flex-direction: row;
+        align-items: center;
         justify-content: space-between;
-        margin: 20px;
-        padding: 20px 30px;
+        gap: 24px;
+        padding: 16px 0;
     }
 `;
 
@@ -22,59 +34,88 @@ export const LogoWrapper = styled.div`
     width: 100%;
 
     @media (min-width: 769px) {
-        justify-content: flex-start;
+        width: auto;
+        flex: 1;
+        gap: 24px;
     }
 `;
 
 export const Logo = styled.a`
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     text-decoration: none;
-    margin-right: 20px;
-    background-color: ${({ themeStyle }) => themeStyle.backgroundColor};
-    color: ${({ themeStyle }) => themeStyle.textColor};
+    color: ${({ theme }) => theme.color};
+    white-space: nowrap;
+    transition: opacity 0.15s ease;
+
+    span {
+        margin-left: 4px;
+    }
+
+    &:hover {
+        opacity: 0.8;
+    }
 
     @media (max-width: 768px) {
-        font-size: 20px;
+        font-size: 19px;
     }
 `;
 
 export const ButtonGroup = styled.div`
     display: flex;
     align-items: center;
+    gap: 8px;
 
-    & > button {
-        margin-left: 15px;
-        cursor: pointer;
-        border: none;
-    }
-
-    @media (max-width: 768px) {
-        flex-wrap: nowrap;
-        & > button {
-            margin-left: 10px;
-        }
+    @media (min-width: 769px) {
+        order: 2;
+        margin-left: auto;
     }
 `;
 
 export const SearchBarWrapper = styled.div`
-    margin-top: 10px;
-    width: 100%; /* SearchBar가 전체 너비를 차지하도록 설정 */
+    width: 100%;
 
     @media (min-width: 769px) {
-        margin-top: 0;
-        width: auto; /* 큰 화면에서는 기본 설정으로 복구 */
+        width: 280px;
+        flex-shrink: 0;
     }
 `;
 
 export const Button = styled.button`
-    background-color: ${({ themeStyle }) => themeStyle.backgroundColor};
-    color: ${({ themeStyle }) => themeStyle.textColor};
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    background-color: transparent;
+    color: ${({ theme }) => theme.color};
+    border: 1px solid ${({ theme }) => theme.border};
+
+    &:hover {
+        background-color: ${({ theme }) => theme.surfaceAlt};
+    }
+
+    &:focus-visible {
+        outline: 2px solid ${({ theme }) => theme.accent};
+        outline-offset: 2px;
+    }
+
+    ${({ $primary, theme }) => $primary && css`
+        background-color: ${theme.accent};
+        border-color: ${theme.accent};
+        color: #fff;
+
+        &:hover {
+            background-color: ${theme.accent};
+            filter: brightness(1.08);
+        }
+    `}
 
     @media (max-width: 768px) {
-        padding: 8px 12px;
-        font-size: 14px;
+        padding: 7px 12px;
+        font-size: 13px;
     }
 `;
