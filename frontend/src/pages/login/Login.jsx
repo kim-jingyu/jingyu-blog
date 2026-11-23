@@ -5,13 +5,14 @@ import {
   LoginWrapper,
   BrandLink,
   Divider,
+  Field,
   InputField,
-  Links,
+  Label,
   LoginButton,
   LoginContainer,
   LoginForm,
-  Options,
   SocialLogin,
+  Subtitle,
   Title,
 } from './Login.style';
 import { useState } from 'react';
@@ -54,24 +55,37 @@ function Login() {
         <LoginContainer>
           <BrandLink href="/">진규의 블로그</BrandLink>
           <Title>로그인</Title>
+          <Subtitle>소셜 계정 또는 관리자 계정으로 로그인하세요.</Subtitle>
           <LoginForm onSubmit={login}>
-            <InputField placeholder="아이디" value={loginId} onChange={(e) => setLoginId(e.target.value)} />
-            <InputField type="password" placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <LoginButton type="submit">로그인</LoginButton>
+            <Field>
+              <Label htmlFor="loginId">아이디</Label>
+              <InputField
+                id="loginId"
+                autoComplete="username"
+                placeholder="아이디를 입력하세요"
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="password">비밀번호</Label>
+              <InputField
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                placeholder="비밀번호를 입력하세요"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Field>
+            <LoginButton type="submit" disabled={!loginId.trim() || !password}>
+              로그인
+            </LoginButton>
           </LoginForm>
-          <Options>
-            <label>
-              <input type="checkbox" />
-              자동 로그인
-            </label>
-            <Links>
-              <a href="#">아이디 찾기</a> | <a href="#">비밀번호 찾기</a>
-            </Links>
-          </Options>
           <Divider>또는</Divider>
           <SocialLogin>
-            <GoogleButton style={{ textDecoration: 'none' }}>구글 로그인</GoogleButton>
-            <KakaoButton style={{ textDecoration: 'none' }}>카카오 로그인</KakaoButton>
+            <GoogleButton>Google로 계속하기</GoogleButton>
+            <KakaoButton>카카오로 계속하기</KakaoButton>
           </SocialLogin>
         </LoginContainer>
       </LoginWrapper>
