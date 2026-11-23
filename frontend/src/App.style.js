@@ -3,7 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 const base = {
     radius: '12px',
     radiusSm: '8px',
-    maxWidth: '760px',
+    maxWidth: '720px',
     font: `'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif`,
     mono: `'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', monospace`,
 };
@@ -12,32 +12,33 @@ export const lightTheme = {
     ...base,
     isDark: false,
     backgroundColor: '#ffffff',
-    color: '#1b1d22',
-    surface: '#f7f8fa',
-    surfaceAlt: '#eef0f3',
-    border: '#e3e6eb',
-    textMuted: '#6b717c',
-    accent: '#2f7cf6',
-    accentSoft: 'rgba(47, 124, 246, 0.1)',
-    danger: '#e5484d',
-    codeBg: '#f3f4f6',
-    shadow: '0 8px 24px rgba(15, 20, 30, 0.08)',
+    color: '#111111',
+    surface: '#f6f6f6',
+    surfaceAlt: '#ededed',
+    border: '#e6e6e6',
+    textMuted: '#777777',
+    accent: '#111111',
+    accentSoft: 'rgba(0, 0, 0, 0.06)',
+    danger: '#d93636',
+    codeBg: '#f6f6f6',
+    shadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
 };
 
+// 흑백 위주 미니멀 다크
 export const darkTheme = {
     ...base,
     isDark: true,
-    backgroundColor: '#16181d',
-    color: '#e6e8eb',
-    surface: '#1e2128',
-    surfaceAlt: '#262a32',
-    border: '#2d323b',
-    textMuted: '#959ba5',
-    accent: '#6aaeff',
-    accentSoft: 'rgba(106, 174, 255, 0.12)',
+    backgroundColor: '#121212',
+    color: '#ececec',
+    surface: '#1a1a1a',
+    surfaceAlt: '#232323',
+    border: '#2a2a2a',
+    textMuted: '#8c8c8c',
+    accent: '#ffffff',
+    accentSoft: 'rgba(255, 255, 255, 0.1)',
     danger: '#ff6b6b',
-    codeBg: '#1e2128',
-    shadow: '0 12px 32px rgba(0, 0, 0, 0.45)',
+    codeBg: '#1a1a1a',
+    shadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
 };
 
 export const GlobalStyle = createGlobalStyle`
@@ -47,6 +48,10 @@ export const GlobalStyle = createGlobalStyle`
 
     html {
         -webkit-text-size-adjust: 100%;
+    }
+
+    html, body {
+        overflow-x: clip; /* hidden과 달리 sticky 헤더를 깨지 않음 */
     }
 
     body {
@@ -99,12 +104,15 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .wmde-markdown a {
-        color: ${({ theme }) => theme.accent};
+        color: ${({ theme }) => theme.color};
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-color: ${({ theme }) => theme.textMuted};
     }
 
     .wmde-markdown blockquote {
         color: ${({ theme }) => theme.textMuted};
-        border-left-color: ${({ theme }) => theme.accent};
+        border-left-color: ${({ theme }) => theme.border};
     }
 
     .wmde-markdown img {

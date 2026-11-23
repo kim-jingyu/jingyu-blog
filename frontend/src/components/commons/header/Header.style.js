@@ -1,29 +1,26 @@
 import styled, { css } from "styled-components";
 
 export const HeaderContainer = styled.header`
-    position: sticky;
-    top: 0;
-    z-index: 100;
     width: 100%;
-    margin-bottom: 32px;
-    background-color: ${({ theme }) => theme.isDark ? 'rgba(22, 24, 29, 0.85)' : 'rgba(255, 255, 255, 0.85)'};
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    margin-bottom: 56px;
     border-bottom: 1px solid ${({ theme }) => theme.border};
+
+    @media (max-width: 768px) {
+        margin-bottom: 36px;
+    }
 `;
 
 export const HeaderInner = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 14px 0;
+    gap: 8px;
+    padding: 28px 0 16px;
 
     @media (min-width: 769px) {
         flex-direction: row;
         align-items: center;
-        justify-content: space-between;
         gap: 24px;
-        padding: 16px 0;
+        padding: 40px 0 20px;
     }
 `;
 
@@ -34,42 +31,34 @@ export const LogoWrapper = styled.div`
     width: 100%;
 
     @media (min-width: 769px) {
-        width: auto;
-        flex: 1;
-        gap: 24px;
+        display: contents; /* 데스크톱: 로고 | 검색 | 버튼 한 줄 배치 */
     }
 `;
 
 export const Logo = styled.a`
-    font-size: 22px;
-    font-weight: 800;
+    font-size: 20px;
+    font-weight: 700;
     letter-spacing: -0.02em;
     text-decoration: none;
     color: ${({ theme }) => theme.color};
     white-space: nowrap;
-    transition: opacity 0.15s ease;
 
     span {
         margin-left: 4px;
     }
 
-    &:hover {
-        opacity: 0.8;
-    }
-
-    @media (max-width: 768px) {
-        font-size: 19px;
+    @media (min-width: 769px) {
+        margin-right: auto;
     }
 `;
 
 export const ButtonGroup = styled.div`
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 16px;
 
     @media (min-width: 769px) {
-        order: 2;
-        margin-left: auto;
+        order: 3;
     }
 `;
 
@@ -77,45 +66,33 @@ export const SearchBarWrapper = styled.div`
     width: 100%;
 
     @media (min-width: 769px) {
-        width: 280px;
+        order: 2;
+        width: 180px;
         flex-shrink: 0;
     }
 `;
 
 export const Button = styled.button`
-    padding: 8px 14px;
+    padding: 0;
+    border: none;
+    background: none;
     font-size: 14px;
-    font-weight: 600;
-    border-radius: 999px;
     cursor: pointer;
     white-space: nowrap;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-    background-color: transparent;
-    color: ${({ theme }) => theme.color};
-    border: 1px solid ${({ theme }) => theme.border};
+    color: ${({ theme }) => theme.textMuted};
+    transition: color 0.15s ease;
 
     &:hover {
-        background-color: ${({ theme }) => theme.surfaceAlt};
+        color: ${({ theme }) => theme.color};
     }
 
     &:focus-visible {
-        outline: 2px solid ${({ theme }) => theme.accent};
-        outline-offset: 2px;
+        outline: 1px solid ${({ theme }) => theme.color};
+        outline-offset: 4px;
     }
 
     ${({ $primary, theme }) => $primary && css`
-        background-color: ${theme.accent};
-        border-color: ${theme.accent};
-        color: #fff;
-
-        &:hover {
-            background-color: ${theme.accent};
-            filter: brightness(1.08);
-        }
+        color: ${theme.color};
+        font-weight: 600;
     `}
-
-    @media (max-width: 768px) {
-        padding: 7px 12px;
-        font-size: 13px;
-    }
 `;

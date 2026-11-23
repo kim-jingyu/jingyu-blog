@@ -82,7 +82,7 @@ export const ModalButton = styled.button`
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.15s ease, filter 0.15s ease;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
 
     &:hover:not(:disabled) {
         background-color: ${({ theme }) => theme.surfaceAlt};
@@ -91,11 +91,11 @@ export const ModalButton = styled.button`
     ${({ $primary, theme }) => $primary && css`
         border-color: ${theme.accent};
         background-color: ${theme.accent};
-        color: #fff;
+        color: ${theme.backgroundColor};
 
         &:hover:not(:disabled) {
             background-color: ${theme.accent};
-            filter: brightness(1.08);
+            opacity: 0.85;
         }
     `}
 

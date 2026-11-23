@@ -14,23 +14,16 @@ export const LoginWrapper = styled.div`
 export const LoginContainer = styled.div`
     width: 100%;
     max-width: 380px;
-    padding: 36px 28px 28px;
-    border-radius: 16px;
-    text-align: center;
-    background-color: ${({ theme }) => theme.surface};
-    border: 1px solid ${({ theme }) => theme.border};
-    box-shadow: ${({ theme }) => theme.shadow};
+    padding: 0;
+    text-align: left;
 
-    @media (max-width: 480px) {
-        padding: 28px 20px 20px;
-    }
 `
 
 export const BrandLink = styled.a`
     display: inline-block;
     margin-bottom: 8px;
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.85rem;
+    font-weight: 400;
     color: ${({ theme }) => theme.textMuted};
     text-decoration: none;
 
@@ -40,9 +33,9 @@ export const BrandLink = styled.a`
 `
 
 export const Title = styled.h1`
-    margin: 0 0 28px;
-    font-size: 1.6rem;
-    font-weight: 800;
+    margin: 0 0 32px;
+    font-size: 1.75rem;
+    font-weight: 700;
     letter-spacing: -0.02em;
 `
 
@@ -53,11 +46,12 @@ export const LoginForm = styled.form`
 `
 
 export const InputField = styled.input`
-    padding: 12px 14px;
+    padding: 12px 0;
     font-size: 15px;
-    border: 1px solid ${({ theme }) => theme.border};
-    border-radius: ${({ theme }) => theme.radiusSm};
-    background-color: ${({ theme }) => theme.backgroundColor};
+    border: none;
+    border-bottom: 1px solid ${({ theme }) => theme.border};
+    border-radius: 0;
+    background-color: transparent;
     color: ${({ theme }) => theme.color};
     outline: none;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -67,8 +61,7 @@ export const InputField = styled.input`
     }
 
     &:focus {
-        border-color: ${({ theme }) => theme.accent};
-        box-shadow: 0 0 0 3px ${({ theme }) => theme.accentSoft};
+        border-bottom-color: ${({ theme }) => theme.color};
     }
 
     @media (max-width: 768px) {
@@ -77,19 +70,19 @@ export const InputField = styled.input`
 `
 
 export const LoginButton = styled.button`
-    margin-top: 6px;
+    margin-top: 20px;
     padding: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.backgroundColor};
     background-color: ${({ theme }) => theme.accent};
     border: none;
     border-radius: ${({ theme }) => theme.radiusSm};
     cursor: pointer;
-    transition: filter 0.15s ease;
+    transition: opacity 0.15s ease;
 
     &:hover {
-        filter: brightness(1.08);
+        opacity: 0.85;
     }
 
     &:focus-visible {

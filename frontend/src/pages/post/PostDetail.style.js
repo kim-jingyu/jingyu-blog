@@ -30,8 +30,8 @@ export const StatusText = styled.p`
 
 export const BackLink = styled.a`
     align-self: flex-start;
-    margin-bottom: 32px;
-    font-size: 0.9rem;
+    margin-bottom: 48px;
+    font-size: 0.85rem;
     color: ${({ theme }) => theme.textMuted};
     text-decoration: none;
     transition: color 0.15s ease;
@@ -42,22 +42,20 @@ export const BackLink = styled.a`
 `;
 
 export const PostHeader = styled.header`
-    padding-bottom: 28px;
-    margin-bottom: 32px;
-    border-bottom: 1px solid ${({ theme }) => theme.border};
+    margin-bottom: 48px;
 `;
 
 export const Title = styled.h1`
     margin: 0;
-    font-size: 2.25rem;
-    font-weight: 800;
-    line-height: 1.3;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.35;
     letter-spacing: -0.025em;
     word-break: keep-all;
     overflow-wrap: anywhere;
 
     @media (max-width: 768px) {
-        font-size: 1.75rem;
+        font-size: 1.6rem;
     }
 `;
 
@@ -65,34 +63,32 @@ export const MetaRow = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: 12px;
-    margin-top: 16px;
+    margin-bottom: 10px;
 `;
 
 export const DateInfo = styled.time`
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
     color: ${({ theme }) => theme.textMuted};
 `;
 
 export const AdminActions = styled.div`
     display: flex;
-    gap: 4px;
+    gap: 14px;
 `;
 
 const ghostButton = css`
-    padding: 6px 12px;
+    padding: 0;
     border: none;
-    border-radius: ${({ theme }) => theme.radiusSm};
-    background-color: transparent;
+    background: none;
     font-size: 0.85rem;
-    font-weight: 600;
     cursor: pointer;
     color: ${({ theme }) => theme.textMuted};
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: color 0.15s ease;
 
     &:hover {
-        background-color: ${({ theme }) => theme.surfaceAlt};
         color: ${({ theme }) => theme.color};
     }
 
@@ -115,25 +111,19 @@ export const AdminEditButton = styled.button`
 export const HashtagList = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 16px;
+    gap: 4px 12px;
+    margin-top: 14px;
 `;
 
 export const HashtagItem = styled.span`
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    background-color: ${({ theme }) => theme.accentSoft};
-    color: ${({ theme }) => theme.accent};
+    font-size: 0.88rem;
+    color: ${({ theme }) => theme.textMuted};
 `;
 
 export const TocBox = styled.nav`
-    margin-bottom: 40px;
-    padding: 18px 22px;
-    border-radius: ${({ theme }) => theme.radius};
-    background-color: ${({ theme }) => theme.surface};
-    border: 1px solid ${({ theme }) => theme.border};
+    margin-bottom: 48px;
+    padding: 2px 0 2px 18px;
+    border-left: 1px solid ${({ theme }) => theme.border};
 
     ul {
         list-style: none;
@@ -143,24 +133,22 @@ export const TocBox = styled.nav`
 `;
 
 export const TocTitle = styled.div`
-    margin-bottom: 10px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: ${({ theme }) => theme.textMuted};
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: ${({ theme }) => theme.color};
 `;
 
 export const TocItem = styled.li`
-    padding: 4px 0 4px ${({ $level }) => ($level - 1) * 16}px;
-    font-size: 0.9rem;
+    padding: 3px 0 3px ${({ $level }) => ($level - 1) * 14}px;
+    font-size: 0.88rem;
     line-height: 1.5;
     cursor: pointer;
     color: ${({ theme }) => theme.textMuted};
     transition: color 0.15s ease;
 
     &:hover {
-        color: ${({ theme }) => theme.accent};
+        color: ${({ theme }) => theme.color};
     }
 `;
 
@@ -199,8 +187,8 @@ export const StyledMarkdown = styled(MDEditor.Markdown)`
 `;
 
 export const CommentSection = styled.section`
-    margin-top: 64px;
-    padding-top: 32px;
+    margin-top: 80px;
+    padding-top: 40px;
     border-top: 1px solid ${({ theme }) => theme.border};
 `;
 
@@ -212,41 +200,41 @@ export const CommentHeader = styled.div`
 
     h3 {
         margin: 0;
-        font-size: 1.15rem;
-        font-weight: 700;
+        font-size: 1rem;
+        font-weight: 600;
     }
 `;
 
 export const CommentCount = styled.span`
     margin-left: 4px;
-    color: ${({ theme }) => theme.accent};
+    font-weight: 400;
+    color: ${({ theme }) => theme.textMuted};
 `;
 
 export const AddCommentButton = styled.button`
-    padding: 8px 16px;
+    padding: 0;
     border: none;
-    border-radius: 999px;
+    background: none;
     font-size: 0.88rem;
-    font-weight: 600;
     cursor: pointer;
-    background-color: ${({ theme }) => theme.accent};
-    color: #fff;
-    transition: filter 0.15s ease;
+    color: ${({ theme }) => theme.textMuted};
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.15s ease;
 
     &:hover {
-        filter: brightness(1.08);
+        color: ${({ theme }) => theme.color};
     }
 
     &:focus-visible {
-        outline: 2px solid ${({ theme }) => theme.accent};
-        outline-offset: 2px;
+        outline: 1px solid ${({ theme }) => theme.color};
+        outline-offset: 4px;
     }
 `;
 
 export const EmptyComment = styled.p`
     margin: 0;
-    padding: 32px 0;
-    text-align: center;
+    padding: 16px 0;
     font-size: 0.92rem;
     color: ${({ theme }) => theme.textMuted};
 `;

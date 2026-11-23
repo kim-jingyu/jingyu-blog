@@ -8,6 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { MainContainer, StatusText } from "./MainList.style";
 
 
+const formatDate = (date) => {
+    const d = new Date(date);
+    const parts = new Intl.DateTimeFormat('ko-KR', {
+        timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
+    }).formatToParts(d);
+    const get = (type) => parts.find((p) => p.type === type)?.value;
+    return `${get('year')}.${get('month')}.${get('day')}`;
+};
+
 function MainList() {
     const [posts, setPosts] = useRecoilState(postState);
     const [page, setPage] = useRecoilState(pageState);
@@ -54,6 +63,7 @@ function MainList() {
                 dataLength={posts.length}
                 next={loadMorePosts}
                 hasMore={hasMore}
+                style={{ overflow: 'visible' }}
                 loader={<StatusText>불러오는 중…</StatusText>}
                 endMessage={posts.length === 0 ? <StatusText>{searchKeyword ? '검색 결과가 없습니다.' : '아직 작성된 글이 없습니다.'}</StatusText> : null}
             >
@@ -61,12 +71,7 @@ function MainList() {
                     <Post 
                         key={post.postId}
                         title={post.title}
-                        date={new Date(post.date).toLocaleString('ko-KR', {
-                            timeZone: 'Asia/Seoul',
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit'
-                        })}
+                        date={formatDate(post.date)}
                         content={post.content}
                         onClick={() => clickDetailPost(post.postId)}
                     />

@@ -26,9 +26,9 @@ const Post = ({ title, date, content, onClick }) => {
 
     return (
         <PostContainer role="link" tabIndex={0} onClick={onClick} onKeyDown={handleKeyDown}>
+            <Date>{date}</Date>
             <Title>{title}</Title>
             {excerpt && <Excerpt>{excerpt}</Excerpt>}
-            <Date>{date}</Date>
         </PostContainer>
     )
 }

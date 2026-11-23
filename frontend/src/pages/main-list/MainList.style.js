@@ -13,8 +13,8 @@ export const MainContainer = styled.div`
 `;
 
 export const StatusText = styled.p`
-    text-align: center;
-    padding: 32px 0;
+    text-align: left;
+    padding: 24px 0;
     color: ${({ theme }) => theme.textMuted};
     font-size: 0.9rem;
 `;

@@ -96,12 +96,10 @@ export const HashtagList = styled.div`
 // 해시태그 항목
 export const HashtagItem = styled.span`
     display: inline-block;
-    background-color: ${({ theme }) => theme.accentSoft};
-    border-radius: 999px;
-    padding: 4px 12px;
-    margin: 5px;
-    font-size: 0.85rem;
-    color: ${({ theme }) => theme.accent};
+    padding: 4px 0;
+    margin: 5px 12px 5px 0;
+    font-size: 0.88rem;
+    color: ${({ theme }) => theme.textMuted};
     cursor: pointer;
     &:hover {
         text-decoration: line-through;
@@ -113,15 +111,15 @@ export const Button = styled.button`
     padding: 10px 24px;
     background-color: ${({ theme }) => theme.accent};
     border: none;
-    border-radius: 999px;
-    color: white;
+    border-radius: 8px;
+    color: ${({ theme }) => theme.backgroundColor};
     font-size: 15px;
     font-weight: 700;
     white-space: nowrap;
     cursor: pointer;
     margin-left: 20px;
     &:hover {
-        filter: brightness(1.08);
+        opacity: 0.85;
     }
     &:disabled {
         opacity: 0.5;

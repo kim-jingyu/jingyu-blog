@@ -14,11 +14,11 @@ export const NotFoundContainer = styled.div`
 
 export const Code = styled.h1`
   margin: 0;
-  font-size: 5rem;
-  font-weight: 800;
+  font-size: 3rem;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.04em;
-  color: ${({ theme }) => theme.accent};
+  letter-spacing: -0.03em;
+  color: ${({ theme }) => theme.color};
 `;
 
 export const Message = styled.p`
@@ -29,16 +29,12 @@ export const Message = styled.p`
 
 export const HomeLink = styled.a`
   margin-top: 16px;
-  padding: 10px 20px;
-  border-radius: 999px;
-  border: 1px solid ${({ theme }) => theme.border};
-  font-size: 0.92rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: ${({ theme }) => theme.color};
-  transition: background-color 0.15s ease;
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.textMuted};
+  text-underline-offset: 4px;
+  transition: color 0.15s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.surfaceAlt};
+    color: ${({ theme }) => theme.color};
   }
 `;

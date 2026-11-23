@@ -164,12 +164,13 @@ const PostDetail = () => {
         }
     };
 
-    const formatDate = (date) => new Date(date).toLocaleString('ko-KR', {
-        timeZone: 'Asia/Seoul',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
+    const formatDate = (date) => {
+        const parts = new Intl.DateTimeFormat('ko-KR', {
+            timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
+        }).formatToParts(new Date(date));
+        const get = (type) => parts.find((p) => p.type === type)?.value;
+        return `${get('year')}.${get('month')}.${get('day')}`;
+    };
 
     const canComment = userRole === 'MEMBER' || userRole === 'ADMIN';
 
@@ -179,7 +180,6 @@ const PostDetail = () => {
                 <BackLink href="/">← 전체 글</BackLink>
 
                 <PostHeader>
-                    <Title>{post.title}</Title>
                     <MetaRow>
                         <DateInfo>{formatDate(post.date)}</DateInfo>
                         {userRole === 'ADMIN' && (
@@ -196,6 +196,7 @@ const PostDetail = () => {
                             </AdminActions>
                         )}
                     </MetaRow>
+                    <Title>{post.title}</Title>
                     {post.hashtags?.length > 0 && (
                         <HashtagList>
                             {post.hashtags.map((hashtag, index) => (
@@ -245,7 +246,7 @@ const PostDetail = () => {
                                 <CommentItem key={comment.commentId}>
                                     <CommentMeta>
                                         <strong>{comment.memberName}</strong>
-                                        <small>{new Date(comment.date).toLocaleString('ko-KR')}</small>
+                                        <small>{formatDate(comment.date)}</small>
                                         {canComment && (
                                             <CommentDeleteButton onClick={() => handleDeleteComment(comment.commentId)}>
                                                 삭제
